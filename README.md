@@ -1,6 +1,6 @@
 MyTeamName
 Team members:
-1. Kaiyue
-2. Dayang
-3. Xin Jie
+1. 
+2. 
+3. 
 4. Kenneth
