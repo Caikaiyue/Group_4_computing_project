@@ -12,3 +12,4 @@ student1 = {'student_name': 'Student1', 'year_enrolled': 2020}
 result = coll1.insert_one(student1)
 client.close()
 
+print('hello')
