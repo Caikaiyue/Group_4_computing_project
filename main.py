@@ -1,15 +1,53 @@
-import pymongo
+from flask import Flask, render_template, request
+app = Flask(__name__)
 
-#including names, and password
-uri = "mongodb://Group_4:ESSD8GMd3nLct74@cluster0-shard-00-00.qbwtc.mongodb.net:27017,cluster0-shard-00-01.qbwtc.mongodb.net:27017,cluster0-shard-00-02.qbwtc.mongodb.net:27017/mGroup_4?ssl=true&replicaSet=atlas-u0fo68-shard-0&authSource=admin&retryWrites=true&w=majority"
+@app.route('/', methods=["GET"])
+def splash():
+    pass
 
-client = pymongo.MongoClient(uri)   #pass in the uri
+@app.route('/index', methods=["GET"])
+def index():
+    # link to cca
+    # link to events
+    pass
 
-db = client['Student_information']
-coll1 = db["student_names_collection"]
+@app.route('/event', methods=["GET", "POST"])
+def event():
+    # list of all events
+    # REQUEST ARGS
+    # when clicked, goes to /event?event=<event name>
+    # indiv event page has
+    # - link to event_add_participant, goes to /event/add_partipant?event=<event_id>
+    # - link to event_remove_participant
+    pass
 
-student1 = {'student_name': 'Student1', 'year_enrolled': 2020}
-result = coll1.insert_one(student1)
-client.close()
+@app.route('/event/add_participant', methods=["GET", "POST"])
+def event_add_participant():
+    # Required request arg: event=<event_id>
+    # display list of students who are not participants
+    # When form submitted, send POST request to /event
+    # with event_id and participant_id
+    pass
 
-print('hello')
+@app.route('/event/remove_participant', methods=["GET", "POST"])
+def event_remove_participant():
+    pass
+
+@app.route('/cca', methods=["GET"])
+def cca():
+    # list of all cca
+    # when clicked, passes name=<cca name> as request arg
+    # each cca has
+    # - link to cca_add_member
+    # - link to cca_remove_member
+    pass
+
+@app.route('/cca/add_member', methods=["GET", "POST"])
+def cca_add_member():
+    pass
+
+@app.route('/cca/remove_member', methods=["GET", "POST"])
+def cca_remove_member():
+    pass
+
+app.run('0.0.0.0')
