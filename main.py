@@ -5,10 +5,4 @@ uri = "mongodb://Group_4:ESSD8GMd3nLct74@cluster0-shard-00-00.qbwtc.mongodb.net:
 
 client = pymongo.MongoClient(uri)   #pass in the uri
 
-db = client['Student_information']
-coll1 = db["student_names_collection"]
-
-student1 = {'student_name': 'Student1', 'year_enrolled': 2020}
-result = coll1.insert_one(student1)
-client.close()
 
