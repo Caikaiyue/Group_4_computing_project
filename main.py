@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 from storage import Student, Club, Activity
+import view
+
 
 
 app = Flask(__name__)
@@ -22,17 +24,22 @@ def index():
 
 @app.route('/activity', methods=['GET'])
 def activity():
-    # Show all activities
-
-    return render_template('activity.html', activity_list = activity_coll.all_activity())
-
     # /activity?id=?  --> Show details of activity, & participants
-    # add participant: page with dropdown list of students
         # POST /activity/add_participant form [activity_id, student_id]
+
+    # If no request args, show all activities
+    return view.all_activities()
+    # If id in request args,
+    # show activity details and participants
+    return view.activity_with_id(activity_id)
 
 @app.route('/activity/add_participant', methods=['GET', 'POST'])
 def activity_add_participant():
-    student_list = activity_coll.
+    # GET: show dropdown list for adding student
+    return view.add_activity_participant(activity_id)
+    # POST: add participant to db
+    activity_coll...
+    return ...
     
 @app.route('/club', methods=['GET'])
 def club():
@@ -40,11 +47,19 @@ def club():
     # /club?id=<id>  --> show 1 club
     # add member: page with dropdown list of students
         # POST /club/add_member form [club_id, student_id]
-    pass
+    # If no request args, show all clubs
+    return view.all_clubs()
+    # If id in request args,
+    # show activity details and participants
+    return view.club_with_id(club_id)
 
 @app.route('/club/add_member', methods=['GET', 'POST'])
 def club_add_member():
-    pass
+    # GET: show dropdown list for adding student
+    return view.add_club_member(club_id)
+    # POST: add member to db
+    cca_coll...
+    return ...
 
 
 
