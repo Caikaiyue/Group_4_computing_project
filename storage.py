@@ -1,7 +1,6 @@
 import csv, pymongo
 
 
-class Student:
     # idk whether need this LOLOL
     # def __init__(self, name, age, year_enrolled, graduating_year, class_id, subjects, clubs, activities):
     #     self._name = name
@@ -12,6 +11,29 @@ class Student:
     #     self._subjects = subjects
     #     self._clubs = clubs
     #     self._activities = activities
+class Student:
+    """
+    Encapsulate access to Student collection.
+
+    Methods
+    -------
+    insert_record(record)
+        Insert a new document from the given record
+
+    get(id) -> dict
+        Return a document with the given id
+
+    all() -> [dict]
+        Return all documents in the collection
+
+    update_record(id_, field1=value1[, field2=value2, ...])
+        Update the document with the given id,
+        according to specified keyword arguments.
+        Each keyword argument follows field=value format.
+
+    delete_record(id)
+    Delete the document with the given id
+    """
     def connection(self):
         client = pymongo.MongoClient("mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority")
         db = client['student_registration']
