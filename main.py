@@ -37,7 +37,7 @@ def activity_add_participant():
     # page to choose student:
     if "student_id" not in request.form:
         activity_no = request.form["activity_id"] 
-        students = activity_coll.get_student(id=activity_id)
+        students = student_coll.get_student()
         
         return render_template(
         'activity_add_participant.html', 
