@@ -2,10 +2,8 @@ import csv, pymongo
 
 
 class Student:
-
     # idk whether need this LOLOL
     # def __init__(self, name, age, year_enrolled, graduating_year, class_id, subjects, clubs, activities):
-        
     #     self._name = name
     #     self._age = age
     #     self._year_enrolled = year_enrolled
@@ -14,7 +12,6 @@ class Student:
     #     self._subjects = subjects
     #     self._clubs = clubs
     #     self._activities = activities
-
     def connection(self):
         client = pymongo.MongoClient("mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority")
         db = client['student_registration']
@@ -38,12 +35,12 @@ class Student:
         )
 
     #steady
-    def get_student(self, student_id):
+    def get(self, id_):
         coll = self.connection()
         doc = coll.find_one({"student_id": student_id})
         return doc
 
-    def all_student(self):
+    def all(self):
         """
         return list of all students in dict format
 
@@ -54,7 +51,7 @@ class Student:
         }
         """
     #steady
-    def update_student(self, **kwargs):
+    def update_record(self, **kwargs):
         coll = self.connection()
         coll.update_one(
             {"student_id": kwargs["student_id"]},
@@ -103,6 +100,13 @@ class Club:
         doc = coll.find_one({"club_id": club_id}) # retrieve a document matching the club_id
         members = doc["members"] # retrieve a list of members under a club field
         return members
+
+    def get(self, id_):
+        coll = self.connection()
+        return doc
+
+    def all(self):
+        pass
 
     #steady
     def update_record(self, **kwargs):
@@ -171,6 +175,14 @@ class Activity:
         doc = coll.find_one({"activity_id": activity_id})
         participants = doc["participants"]
         return participants
+
+    def get(self, id_):
+        coll = self.connection()
+        doc = coll.find_one({"student_id": student_id})
+        return doc
+
+    def all(self):
+        pass
 
     #steady
     def update_record(self, **kwargs):
