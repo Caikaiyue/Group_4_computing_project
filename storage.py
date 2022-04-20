@@ -43,6 +43,16 @@ class Student:
         doc = coll.find_one({"student_id": student_id})
         return doc
 
+    def all_student(self):
+        """
+        return list of all students in dict format
+
+        dict keys:
+        {
+            "student_id":2,
+            "name": "cky" 
+        }
+        """
     #steady
     def update_student(self, **kwargs):
         coll = self.connection()
@@ -155,7 +165,6 @@ class Activity:
         )
         return
 
-        
     #steady
     def get_participants(self, activity_id):
         coll = self.connection()
