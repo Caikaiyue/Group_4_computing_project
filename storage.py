@@ -41,7 +41,7 @@ class Student:
         return coll
     
     # if don't have the __init__ then can remove the self. and then the parameter include in all the keys
-    def insert_record(self):
+    def insert_record(self, record):
         coll = self.connection()
         coll.insert_one({
             "student_id": self._student_id,
@@ -73,7 +73,7 @@ class Student:
         }
         """
     #steady
-    def update_record(self, **kwargs):
+    def update_record(self, id_, **kwargs):
         coll = self.connection()
         coll.update_one(
             {"student_id": kwargs["student_id"]},
@@ -82,9 +82,9 @@ class Student:
         return
 
     #steady
-    def delete_record(self, student_id):
+    def delete_record(self, id_):
         coll = self.connection()
-        coll.delete_one({"student_id": student_id})
+        coll.delete_one({"student_id": id_})
         return
 
 
