@@ -34,8 +34,11 @@ class Student:
     delete_record(id)
     Delete the document with the given id
     """
+    def __init__(self, uri):
+        self.uri = uri
+
     def connection(self):
-        client = pymongo.MongoClient("mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority")
+        client = pymongo.MongoClient(self.uri)
         db = client['student_registration']
         coll = db["student"]
         return coll
@@ -59,7 +62,7 @@ class Student:
     #steady
     def get(self, id_):
         coll = self.connection()
-        doc = coll.find_one({"student_id": student_id})
+        doc = coll.find_one({"student_id": id_})
         return doc
 
     def all(self):
