@@ -32,7 +32,7 @@ class Student:
         Each keyword argument follows field=value format.
 
     delete_record(id)
-    Delete the document with the given id
+        Delete the document with the given id
     """
     def __init__(self, uri):
         self.uri = uri
