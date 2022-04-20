@@ -155,6 +155,7 @@ class Activity:
         )
         return
 
+        
     #steady
     def get_participants(self, activity_id):
         coll = self.connection()
