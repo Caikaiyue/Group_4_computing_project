@@ -31,7 +31,7 @@ def activity():
     return view.all_activities(activity_list)
     # If id in request args,
     # show activity details and participants
-    return view.activity_with_id(activity_id)
+    return view.activity(activity, participants)
 
 @app.route('/activity/add_participant', methods=['GET', 'POST'])
 def activity_add_participant():
@@ -51,7 +51,7 @@ def club():
     return view.all_clubs()
     # If id in request args,
     # show activity details and participants
-    return view.club_with_id(club_id)
+    return view.club(club_id)
 
 @app.route('/club/add_member', methods=['GET', 'POST'])
 def club_add_member():

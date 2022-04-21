@@ -31,7 +31,7 @@ def add_activity_participant(activity_id: int, participant_list: list):
         "addstudent.html",
         action="",
         entity="participant",
-        items=activity_list,
+        items=participant_list,
     )
 
 def add_club_member(club_list: list):
