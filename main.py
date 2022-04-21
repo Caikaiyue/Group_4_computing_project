@@ -28,7 +28,7 @@ def activity():
         # POST /activity/add_participant form [activity_id, student_id]
 
     # If no request args, show all activities
-    return view.all_activities()
+    return view.all_activities(activity_list)
     # If id in request args,
     # show activity details and participants
     return view.activity_with_id(activity_id)
