@@ -20,10 +20,12 @@ def all_activities(activity_list: list):
     return render_template("activity.html", activities=activity_list)
     
 
-def activity_with_id(id: int):
+def activity(activity: dict, participants: list):
     # return html result with details and participants of activity id
     # display add participant button
-    pass
+    return render_template(
+        ""
+    )
 
 def add_activity_participant(activity_id: int, participant_list: list):
     # return html result with dropdown list showing students
