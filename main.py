@@ -12,6 +12,8 @@ student_coll = Student()
 cca_coll = Club()
 activity_coll = Activity()
 
+
+
 @app.route('/', methods=["GET"])
 def index():
     #Index page shows two boxes, activity and club which directs to /activity and /club
@@ -26,6 +28,7 @@ def activity():
         # POST /activity/add_participant form [activity_id, student_id]
 
     # If no request args, show all activities
+
     if 'id' in request.args:
         id_ = request.args['id']
         # Validate request arg id
@@ -59,6 +62,7 @@ def activity_remove_participant():
     #GET: show dropdpwn list of participants
 
     return view
+
 @app.route('/club', methods=['GET'])
 def club():
     # show all clubs
