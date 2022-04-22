@@ -1,16 +1,16 @@
 from flask import Flask, render_template, request
 from storage import Student, Club, Activity
+import view
+
 
 
 app = Flask(__name__)
 
+
+
 student_coll = Student()
 cca_coll = Club()
 activity_coll = Activity()
-
-activity_coll.get_participants(id=?)
-cca_coll.get_members(id=?)
-
 
 @app.route('/', methods=["GET"])
 def index():
@@ -21,49 +21,63 @@ def index():
     pass
 
 @app.route('/activity', methods=['GET'])
-    # Show all activities
-    
-    return render_template('activity.html', activity_list = activity_coll.all_activity())
-
+def activity():
     # /activity?id=?  --> Show details of activity, & participants
-    # add participant: page with dropdown list of students
         # POST /activity/add_participant form [activity_id, student_id]
+
+    # If no request args, show all activities
+    if 'id' in request.args:
+        id_ = request.args['id']
+        # Validate request arg id
+        # Retrieve activity record
+        activity = ...
+        # Retrieve participant records
+        participants = ...
+        return view.activity(activity, participants)
+    else:
+        # retrieve activities from storage
+        return view.all_activity(activities)
 
 @app.route('/activity/add_participant', methods=['GET', 'POST'])
 def activity_add_participant():
-    # add participant: page with dropdown list of students
-    # POST /activity/add_participant form [activity_id, student_id]
+    if request.method == 'GET':
+        # Handle error if request arg does not have activity_id
+        activity_id = request.args['activity_id']
+        # Validate activity_id
+        participants = ...
+        return view.add_activity_participant(activity_id, participants)
+    elif request.method == 'POST':
+        activity_id = request.form['activity_id']
+        participant_id = request.form['student']
+        # POST: add participant to db
+        
+    activity_coll...
+    return ...
 
-    # page to choose student:
-    if "student_id" not in request.form:
-        activity_no = request.form["activity_id"] 
-        students = student_coll.get_student()
-        
-        return render_template(
-        'activity_add_participant.html', 
-        page_type = "new"
-        activity_id = activity_no, student_list = students        
-        )
+@app.route('/activity/remove_participant', methods=['GET', 'POST'])
+def activity_remove_participant():
+    #GET: show dropdpwn list of participants
 
-    #success page: student_id and activity_id submitted
-    else:
-        render_template(
-        'activity_add_participant.html',
-        page_type = "confirm"
-        )
-        
-        activity_id = request.form["activity_id"]
-        student_id = request.form["student_id"]
-        
-        activity.coll.add_participant(activity_id, student_id)
-    pass
-    
-    
+    return view
 @app.route('/club', methods=['GET'])
+def club():
     # show all clubs
     # /club?id=<id>  --> show 1 club
     # add member: page with dropdown list of students
         # POST /club/add_member form [club_id, student_id]
+    # If no request args, show all clubs
+    return view.all_clubs()
+    # If id in request args,
+    # show activity details and participants
+    return view.club_with_id(club_id)
+
+@app.route('/club/add_member', methods=['GET', 'POST'])
+def club_add_member():
+    # GET: show dropdown list for adding student
+    return view.add_club_member(club_id)
+    # POST: add member to db
+    cca_coll...
+    return ...
 
 
 
