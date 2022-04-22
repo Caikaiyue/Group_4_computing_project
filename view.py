@@ -2,7 +2,6 @@ from flask import render_template
 
 
 
-<<<<<<< HEAD
 #activity methods
 #in the form of render_template(...) so I can directly return all_activities()
 
@@ -34,7 +33,7 @@ def club_with_id(id: int):
 def add_club_member(club_id: int):
     # return html result with dropdown list showing students
     pass
-=======
+
 def all_clubs():
     # return html result with list of all clubs
     pass
@@ -60,4 +59,3 @@ def activity_with_id(id: int):
 def add_activity_participant(activity_id: int):
     # return html result with dropdown list showing students
     pass
->>>>>>> main

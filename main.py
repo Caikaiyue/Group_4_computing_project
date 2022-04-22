@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from storage import Student, Club, Activity
 import view
+import validate
 
 
 
@@ -28,10 +29,11 @@ def activity():
         # POST /activity/add_participant form [activity_id, student_id]
 
     # If no request args, show all activities
-
     if 'id' in request.args:
         id_ = request.args['id']
         # Validate request arg id
+        if not validate.activity_id(id_):
+            raise ValidationError
         # Retrieve activity record
         activity = ...
         # Retrieve participant records
@@ -47,12 +49,20 @@ def activity_add_participant():
         # Handle error if request arg does not have activity_id
         activity_id = request.args['activity_id']
         # Validate activity_id
+        if not validate.activity_id(id_):
+            abort(400)
         participants = ...
         return view.add_activity_participant(activity_id, participants)
     elif request.method == 'POST':
         activity_id = request.form['activity_id']
         participant_id = request.form['student']
-        # POST: add participant to db
+        if not (
+            validate.activity_id(activity_id)
+            and validate.participant_id(participant_id)
+        ):
+            abort(400)
+        # add participant to db
+            
         
     activity_coll...
     return ...
