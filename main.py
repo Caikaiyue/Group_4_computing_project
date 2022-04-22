@@ -12,6 +12,8 @@ student_coll = Student()
 cca_coll = Club()
 activity_coll = Activity()
 
+
+
 @app.route('/', methods=["GET"])
 def index():
     #Index page shows two boxes, activity and club which directs to /activity and /club
@@ -59,6 +61,7 @@ def activity_remove_participant():
     #GET: show dropdpwn list of participants
 
     return view
+
 @app.route('/club', methods=['GET'])
 def club():
     # show all clubs
