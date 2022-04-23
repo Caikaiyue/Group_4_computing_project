@@ -30,15 +30,15 @@ def activity():
 
     #If id in args -> view activity details
     if 'activity_id' in request.args:
-        id_ = request.args['activity_id']
+        activity_id = request.args['activity_id']
         
         # Validate request arg id
-        if not validate.activity_id(id_):
+        if not validate.activity_id(activity_id):
             abort(400)
             
 
         # Retrieve activity record
-        activity = activity_coll.get(id_)
+        activity = activity_coll.get_activity_details(id_)
         
         # Retrieve participant records
         participants = activity_coll.get_participants(id_)
