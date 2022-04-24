@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Add Member</title>
+    </head>
+    <body>
+        <h1>Add Member</h1>
+        <form action="{{action}}" method="post">
+            <label for="dropdown">Add Member:</label>
+        
+                <select id="dropdown" name="student">
+                {% for member in members %}
+                    <option value="{{member['id']}}">
+                    {{member['name']}}
+                    </option>
+                {% endfor %}
+                </select>
+            <input type="submit" value="Add Member">
+        </form>
+
+    </body>
+</html>

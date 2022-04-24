@@ -2,60 +2,55 @@ from flask import render_template
 
 
 
-#activity methods
-#in the form of render_template(...) so I can directly return all_activities()
+def all_clubs(club_list: list):
+    # return html result with list of all clubs
+    return render_template(
+        "clubs.html",
+        clubs=club_list
+    )
 
-def all_activity():
+def club_with_id(club: dict, member_list: list):
+    # return html result with details and members of club id
+    # display add member button
+    return render_template(
+        "activity.html",
+        action="",
+        club = club,
+        members=member_list
+    )
+
+def add_club_member(club_id: int, member_list: list):
+    # return html result with dropdown list showing students
+    return render_template(
+        "add_member.html",
+        action="",
+        members=member_list,
+    )
+
+def all_activities(activity_list: list):
     # return html result with list of all activities
-    # basic what you will expect in the /activity page
-    #/activity page needs to pass in "activity_id" as a form arg
-    pass
-
-def activity_with_id(id: int):
-    # return html result with details and participants of activity id
-    # display add participant button and remove button
+    return render_template(
+        "activities.html",
+        activities=activity_list
+    )
     
-    pass
 
-def add_activity_participant(activity_id: int):
-    # return html result with dropdown list showing students
-    pass
-
-def all_club():
-    # return html result with list of all clubs
-    pass
-
-def club_with_id(id: int):
-    # return html result with details and members of club id
-    # display add member button
-    pass
-
-def add_club_member(club_id: int):
-    # return html result with dropdown list showing students
-    pass
-
-def all_clubs():
-    # return html result with list of all clubs
-    pass
-
-def club_with_id(id: int):
-    # return html result with details and members of club id
-    # display add member button
-    pass
-
-def add_club_member(club_id: int):
-    # return html result with dropdown list showing students
-    pass
-
-def all_activities():
-    # return html result with list of all activities
-    pass
-
-def activity_with_id(id: int):
+def activity_with_id(activity: dict, participant_list: list):
     # return html result with details and participants of activity id
     # display add participant button
-    pass
+    return render_template(
+        "activity.html",
+        action="",
+        activity = activity,
+        participants=participant_list
+    )
 
-def add_activity_participant(activity_id: int):
+def add_activity_participant(activity_id: int, participant_list: list):
     # return html result with dropdown list showing students
-    pass
+
+    return render_template(
+        "add_participant.html",
+        action="",
+        participants=participant_list,
+    )
+

@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>All Activities</title>
+        
+    </head>
+    <body>
+        <h1>All Activities</h1>
+        <table>
+            <tr><th>Activity</th></tr>
+            {% for activity in activities %}
+            <tr><td>
+                <a href="/activites?id={{activity['id']}}">{{activity['name']}}</a>
+            </td></tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
