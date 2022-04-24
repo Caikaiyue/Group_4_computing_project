@@ -1,7 +1,5 @@
 from flask import render_template
 
-
-
 def all_clubs(club_list: list):
     # return html result with list of all clubs
     return render_template(
@@ -47,7 +45,6 @@ def activity_with_id(activity: dict, participant_list: list):
 
 def add_activity_participant(activity_id: int, participant_list: list):
     # return html result with dropdown list showing students
-
     return render_template(
         "add_participant.html",
         action="",
