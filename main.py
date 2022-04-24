@@ -37,6 +37,7 @@ def activity():
         if not validate.activity_id(id_):
             abort(400)
             
+
         # Retrieve activity record
         activity = activity_coll.get(id_)
         
@@ -60,11 +61,13 @@ def activity_add_participant():
             
         activity_id = request.args['activity_id']
         # Validate activity_id
+
         if not validate.activity_id(activity_id):
             abort(400)
 
         #get all the participants from this activity
         participants = activity_coll.get_participants(activity_id)
+
         return view.add_activity_participant(activity_id, participants)
 
     #if its a POST request -> add participant 
@@ -83,6 +86,7 @@ def activity_add_participant():
         activity_coll.add_participant(activity_id, student_id)
 
         return view.add_participant_success()
+
 
 
 @app.route('/activity/remove_participant', methods=['GET', 'POST'])
