@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <h1>{{club['name']}}</h1>
+        <table>
+            <tr><th>Members</th></tr>
+            {% for member in members %}
+            <tr><td>
+                {{member['name']}}
+            </td></tr>
+            {% endfor %}
+            <a href="/club/add_member">Add Member</a><br />
+        </table>
+    </body>
+</html>

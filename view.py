@@ -1,6 +1,5 @@
 from flask import render_template
 
-
 def all_clubs(club_list: list):
     # return html result with list of all clubs
     return render_template(
@@ -51,3 +50,4 @@ def add_activity_participant(activity_id: int, participant_list: list):
         action="",
         participants=participant_list,
     )
+

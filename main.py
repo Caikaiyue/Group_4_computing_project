@@ -29,17 +29,18 @@ def activity():
     # /activity?id=?  --> Show details of activity, & participants
         # POST /activity/add_participant form [activity_id, student_id]
 
+
     #If id in args -> view activity details
     if 'activity_id' in request.args:
-        id_ = request.args['activity_id']
+        activity_id = request.args['activity_id']
         
         # Validate request arg id
-        if not validate.activity_id(id_):
+        if not validate.activity_id(activity_id):
             abort(400)
             
 
         # Retrieve activity record
-        activity = activity_coll.get(id_)
+        activity = activity_coll.get_activity_details(id_)
         
         # Retrieve participant records
         participants = activity_coll.get_participants(id_)
@@ -49,6 +50,7 @@ def activity():
     else:
         # retrieve activities from storage
         return view.all_activity()
+
 
 @app.route('/activity/add_participant', methods=['GET', 'POST'])
 def activity_add_participant():
@@ -120,7 +122,7 @@ def club():
     return view.all_clubs()
     # If id in request args,
     # show activity details and participants
-    return view.club_with_id(club_id)
+    return view.club(club_id)
 
 @app.route('/club/add_member', methods=['GET', 'POST'])
 def club_add_member():
