@@ -6,10 +6,10 @@
     <body>
         <h1>All Clubs</h1>
         <table>
-            <tr><th>Club</th></tr>
+            <tr><th>Clubs</th></tr>
             {% for club in clubs %}
             <tr><td>
-                <a href="/club?id={{club['id']}}">{{activity['name']}}</a>
+                <a href="/clubs?id={{club['id']}}">{{club['name']}}</a>
             </td></tr>
             {% endfor %}
         </table>

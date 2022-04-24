@@ -1,17 +1,14 @@
 <html>
-    <head>
-        <title>All Activities</title>
-        
-    </head>
     <body>
-        <h1>All Activities</h1>
+        <h1>{{activity['name']}}</h1>
         <table>
-            <tr><th>Activity</th></tr>
-            {% for activity in activities %}
+            <tr><th>Participants</th></tr>
+            {% for participant in participants %}
             <tr><td>
-                <a href="/activity?id={{activity['id]}}">{{activity['name']}}</a>
+                {{participant['name']}}
             </td></tr>
             {% endfor %}
+            <a href="/activity/add_participant">Add Participant</a><br />
         </table>
     </body>
 </html>

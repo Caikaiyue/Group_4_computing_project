@@ -1,17 +1,14 @@
 <html>
-    <head>
-        <title>All Clubs</title>
-        
-    </head>
     <body>
-        <h1>All Clubs</h1>
+        <h1>{{club['name']}}</h1>
         <table>
-            <tr><th>Club</th></tr>
-            {% for club in clubs %}
+            <tr><th>Members</th></tr>
+            {% for member in members %}
             <tr><td>
-                <a href="/club?id={{club['id']}}">{{activity['name']}}</a>
+                {{member['name']}}
             </td></tr>
             {% endfor %}
+            <a href="/club/add_member">Add Member</a><br />
         </table>
     </body>
 </html>
