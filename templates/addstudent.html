@@ -5,16 +5,16 @@
     <body>
         <h1>Add {{entity}}</h1>
         <form action="{{action}}" method="post">
-        <label for="dropdown">Add {{entity}}:</label>
+            <label for="dropdown">Add {{entity}}:</label>
         
-        <select id="dropdown" name="student">
-            {% for item in items %}
-                <option value="{{item['id']}}">
+                <select id="dropdown" name="student">
+                {% for item in items %}
+                    <option value="{{item['id']}}">
                     {{item['name']}}
-                </option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Add {{entity}}">
+                    </option>
+                {% endfor %}
+                </select>
+            <input type="submit" value="Add {{entity}}">
         </form>
     </body>
 </html>

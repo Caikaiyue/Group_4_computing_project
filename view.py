@@ -2,8 +2,12 @@ from flask import render_template
 
 
 
-def all_clubs():
+def all_clubs(club_list: list):
     # return html result with list of all clubs
+    return render_template(
+        "all_clubs.html",
+        clubs = club_list
+    )
     pass
 
 def club_with_id(id: int):
