@@ -42,7 +42,7 @@ def activities():
         activity_detail = activity_coll.get_activity_details(activity_id)
         
         # Retrieve participant records
-        participants = activity_coll.get_participants(activity_id)
+        participants, non_participants = activity_coll.get_participant_detail(activity_id)
         return view.activity_with_id(activity_detail, participants) 
         
     #if no request args, show all activities
@@ -64,7 +64,7 @@ def activities_add_participant():
             abort(400)
 
         #get all the students that are not participants
-        participants, nonparticipants = activity.coll.get_participant_detail()
+        participants, non_participants = activity.coll.get_participant_detail(activity_id)
         
         return view.add_activity_participant(activity_id, non_participants)
 
@@ -126,7 +126,7 @@ def club():
         club_detail = club_coll.get_club_details(club_id)
         
         # Retrieve member records
-        members = club_coll.get_members(club_id)
+        members, non_members = club_coll.get_member_detail(club_id)
         return view.club_with_id(club_detail, members)
         
     #if no request args, show all clubs
@@ -147,8 +147,8 @@ def clubs_add_member():
             abort(400)
 
         #get all the members from this club
-        members = club_coll.get_members(club_id)
-        return view.add_club_members(club_id, members)
+        members, non_members = club_coll.get_member_detail(club_id)
+        return view.add_club_members(club_id, non_members)
 
     #if its a POST request -> add members 
     else:
@@ -167,7 +167,7 @@ def clubs_add_member():
 
         #get the student details from st7dent_id
         student_detail = student_coll.get_student_detail(student_id)
-        return view.add_member_success(student_detail)
+        return view.add_club_members(student_detail)
 
 
 @app.route('/club/remove_member', methods=['GET', 'POST'])
