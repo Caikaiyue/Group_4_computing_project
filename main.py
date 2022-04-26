@@ -33,8 +33,6 @@ def activity():
     #If id in args -> view activity details
     if 'id' in request.args:
         activity_id = request.args['id']
-        #how do I store across functions
-
         
         # Validate request arg id
         if not validate.activity_id(activity_id):
@@ -59,7 +57,7 @@ def activity_add_participant():
     #If the page is GET request -> choose which activity
     if 'success' not in request.args:
 
-        activity_id = request.args['activity_id']
+        activity_id = request.args['id']
         # Validate activity_id
 
         if not validate.activity_id(activity_id):
@@ -72,7 +70,7 @@ def activity_add_participant():
         return view.add_activity_participant(activity_id, students)
 
     else:
-        activity_id = ...
+        activity_id = request.form['activity_id']
         student_id = request.form['student'] #an id
         
         #validate both ids
