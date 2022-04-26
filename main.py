@@ -9,9 +9,9 @@ app = Flask(__name__)
 uri = "mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority"
 
 
-student_coll = Student()
-cca_coll = Club()
-activity_coll = Activity()
+student_coll = Student(uri)
+club_coll = Club(uri)
+activity_coll = Activity(uri)
 
 
 
