@@ -241,10 +241,11 @@ class Activity:
         client.close()
         return details
 
-    def get_participants(self, id):
+    def get_participant_details(self, id):
         """
-        Returns a list of dicts
-        [{"participant_id": , "name": }] 
+        Returns two list of dicts
+        participants = [{"participant_id": , "name": }] 
+        non_participants = [{"participant_id": , "name": }] 
         of ONE activity
         """
         client, coll = self.connection()
@@ -260,15 +261,17 @@ class Activity:
             # just append the student_id and name to the students list in dict format
             students.append({"student_id": student["student_id"], "name": student["name"]})
 
-        data = [] # to contain a list of dicts {"student_id": , "name": } if only the student_id is found in the participant list
+        participants = [] # to contain a list of dicts {"student_id": , "name": } if only the student_id is found in the participant list
+        non_participants = [] # to contain a list of dicts {"student_id": , "name": } if the student_id is not found in the participant list
 
         for student in students:
             if student["student_id"] in participants:
-                data.append({"participant_id": student["student_id"], "name": student["name"]})
+                participants.append({"participant_id": student["student_id"], "name": student["name"]})
+            else: non_participants.append({"participant_id": student["student_id"], "name": student["name"]})
 
         client.close()
 
-        return data
+        return participants, non_participants
 
     def get(self, id):
         coll = self.connection()
