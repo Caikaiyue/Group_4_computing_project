@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import string as char
-from typing import Any
-=======
 
 import storage
->>>>>>> main
 
 def activity_id(inputstr: str):
     """
@@ -16,13 +11,10 @@ def activity_id(inputstr: str):
 
     Return True if valid and exists, else return False.
     """
-    inputstr = int(inputstr)
-    
-    if type(value) == str:
-        if value.isdigit():
-            return True
-    return False
-    pass
+    if inputstr.isdigit() and storage.activity_exist(inputstr):
+        return True
+    else:        
+        return False
 
 
 def student_id(inputstr: str):
@@ -33,4 +25,14 @@ def student_id(inputstr: str):
 
     Return True if valid and exists, else return False.
     """
-    pass
+    if inputstr.isdigit() and storage.student_exist(inputstr):
+        return True
+    else:
+        return False
+
+def club_id(inputstr: str):
+    if inputstr.isdigit() and storage.club _exist(inputstr):
+        return True
+    else:
+        return False
+    
