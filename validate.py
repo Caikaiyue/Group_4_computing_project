@@ -17,6 +17,10 @@ def activity_id(inputstr: str):
         return False
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 def student_id(inputstr: str):
     """
     Validate the given inputstr and ensure it is a valid id.

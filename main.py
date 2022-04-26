@@ -6,7 +6,7 @@ import validate
 
 
 app = Flask(__name__)
-
+uri = "mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority"
 
 
 student_coll = Student()
@@ -24,8 +24,13 @@ def index():
     pass
 
 #activity
+<<<<<<< HEAD
 @app.route('/activity', methods=['GET'])
 def activity():
+=======
+@app.route('/activities', methods=['GET'])
+def activities():
+>>>>>>> main
     # /activity?id=?  --> Show details of activity, & participants
         # POST /activity/add_participant form [activity_id, student_id]
 
@@ -50,10 +55,17 @@ def activity():
         # retrieve activities from storage
         all_activities = activity_coll.all_activities()
         return view.all_activities(all_activities)
+<<<<<<< HEAD
 
 
 @app.route('/activity/add_participant', methods=['GET', 'POST'])
 def activity_add_participant():
+=======
+
+
+@app.route('/activities/add_participant', methods=['GET', 'POST'])
+def activities_add_participant():
+>>>>>>> main
     #If the page is GET request -> choose which activity
     if 'success' not in request.args:
 
@@ -82,13 +94,21 @@ def activity_add_participant():
         
         # add participant to db
         activity_coll.add_participant(activity_id, student_id)
+<<<<<<< HEAD
+
+        #get the student details from student_id
+        student_detail = student_coll.get_student_detail(student_id)
+        return view.add_participant_participants(student_detail)
+
+=======
+>>>>>>> main
 
         #get the student details from student_id
         student_detail = student_coll.get_student_detail(student_id)
         return view.add_participant_participants(student_detail)
 
 
-@app.route('/activity/remove_participant', methods=['GET', 'POST'])
+@app.route('/activities/remove_participant', methods=['GET', 'POST'])
 def activity_remove_participant():
     #GET: show dropdpwn list of participants
     if request.method == "GET":
@@ -107,15 +127,20 @@ def activity_remove_participant():
         participant_id = request.form['participant_id']
 
         activity_coll.remove_participant(activity_id, participant_id)
+<<<<<<< HEAD
+
+=======
+>>>>>>> main
 
 
 
-@app.route('/club', methods=['GET'])
+@app.route('/clubs', methods=['GET'])
 def club():
     # /club?id=?  --> Show details of club, & members
         # POST /club/add_member form [club_id, student_id]
 
     #If id in args -> view club details
+<<<<<<< HEAD
     if 'club_id' in request.args:
         id_ = request.args['club_id']
         
@@ -129,10 +154,26 @@ def club():
         # Retrieve member records
         members = club_coll.get_members(id_)
         return view.club(club, members)
+=======
+    if 'id' in request.args:
+        club_id = request.args['id']
+        
+        # Validate request arg id
+        if not validate.club_id(club_id):
+            abort(400)
+            
+        # Retrieve club record
+        club_detail = club_coll.get_club_details(club_id)
+        
+        # Retrieve member records
+        members = club_coll.get_members(club_id)
+        return view.club_with_id(club_detail, members)
+>>>>>>> main
         
     #if no request args, show all clubs
     else:
         # retrieve clubs from storage
+<<<<<<< HEAD
         return view.all_club()
 
 @app.route('/club/add_member', methods=['GET', 'POST'])
@@ -145,6 +186,18 @@ def club_add_member():
             abort(400)
             
         club_id = request.args['club_id']
+=======
+        all_clubs = club_coll.all_clubs()
+        return view.all_club(all_clubs)
+
+@app.route('/clubs/add_member', methods=['GET', 'POST'])
+def clubs_add_member():
+    #If the page is GET request -> choose which club
+    if 'success' not in request.args:
+        
+        # Handle error if request arg does not have club_id          
+        club_id = request.args['id']
+>>>>>>> main
         # Validate club_id
         if not validate.club_id(club_id):
             abort(400)
@@ -154,9 +207,15 @@ def club_add_member():
         return view.add_club_members(club_id, members)
 
     #if its a POST request -> add members 
+<<<<<<< HEAD
     elif request.method == 'POST':
         club_id = request.form['club_id']
         student_id = request.form['student_id']
+=======
+    else:
+        club_id = request.form['club_id']
+        student_id = request.form['student']
+>>>>>>> main
 
         #validate both ids
         if not (
@@ -168,7 +227,13 @@ def club_add_member():
         # add member to db
         club_coll.add_member(club_id, student_id)
 
+<<<<<<< HEAD
         return view.add_member_success()
+=======
+        #get the student details from st7dent_id
+        student_detail = student_coll.get_student_detail(student_id)
+        return view.add_member_success(student_detail)
+>>>>>>> main
 
 
 @app.route('/club/remove_member', methods=['GET', 'POST'])
