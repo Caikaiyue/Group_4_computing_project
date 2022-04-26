@@ -50,11 +50,11 @@ class Student:
             "student_id": self._student_id,
             "name": self._name,
             "age": self._age,
-            "year_enrolled": self._year_enrolled
+            "year_enrolled": self._year_enrolled,
             "graduating_year": self._graduating_year,
             "class_id": self._class_id,
             "subjects": self._subjects,
-            "clubs": self._clubs
+            "clubs": self._clubs,
             "activities": self._activities
             }
         )
