@@ -201,18 +201,21 @@ class Activity:
 
     def activity_exists(id):
         client, coll = self.connection()
-        doc = list(coll.find({"activity_id": id}))
+        doc = list(coll.find({"activity_id": id})) # find whether the activity_id exists
         client.close()
 
-        if len(doc) == 0:
+        if len(doc) == 0: # no such activity_id
             return False
         
-        else: 
+        else: # activity_id exists
             return True
 
 
     def insert(self, record): 
-        coll = self.connection()
+        """
+        Inserts a record into the Activity collection
+        """
+        client, coll = self.connection()
         coll.insert_one({
             "activity_id": record["activity_id"],
             "start_date": record["start_date"],
@@ -221,6 +224,7 @@ class Activity:
             "participants": record["participants"]
         }
         )
+        client.close()
         return
 
     def get_activity_details(self, id):
@@ -230,10 +234,10 @@ class Activity:
         of ONE activity
         """
         client, coll = self.connection()
-        doc = coll.find_one({"activity_id": id})
-        details = {}
-        details["name"] = doc["description"]
-        details["activity_id"] = doc["activity_id"]
+        doc = coll.find_one({"activity_id": id}) # find the ONE activity
+        details = {} # a dict to store the name and activity_id to be returned
+        details["name"] = doc["description"] # get the activity description
+        details["activity_id"] = doc["activity_id"] # get the activity_id
         client.close()
         return details
 
@@ -244,24 +248,25 @@ class Activity:
         of ONE activity
         """
         client, coll = self.connection()
-        doc = coll.find_one({"activity_id": id})
+        doc = coll.find_one({"activity_id": id}) # find the ONE activity
         participants = doc["participant_list"] # returns a list of participant id
 
-        db = client["student_registration"]
-        coll = db["student"]
-        all_students = list(coll.find()) # returns a list of dictionaries
-        students = []
-        for student in all_students:
-            students.append({"student_id": student})
+        db = client["student_registration"] 
+        coll = db["student"] # access the student collection
+        all_students = list(coll.find()) # retrieve all the student records
 
-        doc = coll
-        
+        students = [] # to contain a list of dict {"student_id": , "name": }
+        for student in all_students: # loop through all student records 
+            # just append the student_id and name to the students list in dict format
+            students.append({"student_id": student["student_id"], "name": student["name"]})
 
-        for participant in participants:
+        data = [] # to contain a list of dicts {"student_id": , "name": } if only the student_id is found in the participant list
 
-        details = {}
+        for student in students:
+            if student["student_id"] in participants:
+                data.append({"participant_id": student["student_id"], "name": student["name"]})
 
-
+        return data
 
     def get(self, id):
         coll = self.connection()
