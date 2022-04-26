@@ -122,7 +122,7 @@ class Student():
         return
 
     def get_student_detail(self, id):
-        coll = self.connection()
+        client, coll = self.connection()
         doc = coll.find_one({"student_id": id})
         return doc
 
