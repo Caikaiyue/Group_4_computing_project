@@ -99,9 +99,12 @@ class Student():
         client = pymongo.MongoClient(self._uri)
         db = client['student_registration']
         coll = db["student"]
-        return coll
+        return client, coll
     
     def insert(self, record):
+        """
+        Insert a record into the students collection
+        """
         coll = self.connection()
         coll.insert_one({
             "student_id": record["student_id"],
@@ -115,15 +118,21 @@ class Student():
             "activities": record["activities"]
             }
         )
+        client.close()
         return
 
-    def get(self, id):
-        coll = self.connection()
-        doc = coll.find_one({"student_id": id})
-        return doc
+    # def get(self, id):
+    #     coll = self.connection()
+    #     doc = coll.find_one({"student_id": id})
+    #     return doc
 
     def all_students(self):
-        coll = self.connection()
+         """
+        Returns a dict
+        {"name" : , "id" }
+        of ALL activity
+        """
+        client, coll = self.connection()
         all = list(coll.find())
         return all
 
@@ -200,6 +209,9 @@ class Activity:
         return client, coll
 
     def activity_exists(id):
+        """
+        Check if activity exists in the database.
+        """
         client, coll = self.connection()
         doc = list(coll.find({"activity_id": id})) # find whether the activity_id exists
         client.close()
@@ -273,11 +285,6 @@ class Activity:
 
         return participants, non_participants
 
-    def get(self, id):
-        coll = self.connection()
-        doc = coll.find_one({"student_id": id})
-        return doc
-
     def all_activities(self):
         """
         Returns a list of dict
@@ -294,18 +301,18 @@ class Activity:
 
         return data
 
-    def update(self, id, **kwargs):
-        coll = self.connection()
-        coll.update_one(
-            {"activity_id": id},
-            {'$set': {kwargs["key"]: kwargs["value"]}}
-        )
-        return
+    # def update(self, id, **kwargs):
+    #     coll = self.connection()
+    #     coll.update_one(
+    #         {"activity_id": id},
+    #         {'$set': {kwargs["key"]: kwargs["value"]}}
+    #     )
+    #     return
 
-    def delete_record(self, id):
-        coll = self.connection()
-        coll.delete_one({"activity_id": id})
-        return
+    # def delete_record(self, id):
+    #     coll = self.connection()
+    #     coll.delete_one({"activity_id": id})
+    #     return
 
 
 
