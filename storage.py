@@ -266,6 +266,8 @@ class Activity:
             if student["student_id"] in participants:
                 data.append({"participant_id": student["student_id"], "name": student["name"]})
 
+        client.close()
+
         return data
 
     def get(self, id):
@@ -273,10 +275,21 @@ class Activity:
         doc = coll.find_one({"student_id": id})
         return doc
 
-    def all(self):
-        coll = self.connection()
-        all = list(coll.find())
-        return all
+    def all_activities(self):
+        """
+        Returns a list of dict
+        [{"activity_id": , "name": }]
+        basically retrieve the activity_id and name of all activities
+        """
+        client, coll = self.connection() 
+        all_activities = list(coll.find()) # retrieve all the records from the Activity collection
+        
+        data = [] # to contain a list of dict {"activity_id": , "name": } to be returned
+
+        for activity in all_activities:
+            data.append({"activity_id": activity["activity_id"], "name": activity["name"]})
+
+        return data
 
     def update(self, id, **kwargs):
         coll = self.connection()
