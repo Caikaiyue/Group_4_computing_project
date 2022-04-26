@@ -64,7 +64,7 @@ def activities_add_participant():
             abort(400)
 
         #get all the students that are not participants
-        participants, non_participants = activity.coll.get_participant_detail(activity_id)
+        participants, non_participants = activity_coll.get_participant_detail(activity_id)
         
         return view.add_activity_participant(activity_id, non_participants)
 
@@ -98,7 +98,7 @@ def activity_remove_participant():
 
         activity_id = request.arg["activity_id"]
         participants = activity_coll.get_participants(id_)
-        return view.activity(activity, participants)
+        return view.activity(activity_id, participants)
 
     elif request.method == 'POST':
         
