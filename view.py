@@ -18,12 +18,13 @@ def club_with_id(club_picked: dict, member_list: list):
             members=member_list
         )
 
-def add_club_member(student_list: list):
+def add_club_member(club_id: int, student_list: list):
     # return html result with dropdown list showing students
     return render_template(
             "add_member.html",
             page_type='new',
             action="/clubs/add_member?success",
+            club_id=club_id,
             students=student_list
         )
 
@@ -54,12 +55,13 @@ def activity_with_id(activity_picked: dict, participant_list: list):
             participants=participant_list
         )
 
-def add_activity_participant(student_list: list):
+def add_activity_participant(activity_id: int, student_list: list):
     # return html result with dropdown list showing students
     return render_template(
             "add_participant.html",
             page_type='new',
             action="/activities/add_participant?success",
+            activity_id=activity_id,
             students=student_list
         )
     
