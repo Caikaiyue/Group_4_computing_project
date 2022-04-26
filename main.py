@@ -6,12 +6,12 @@ import validate
 
 
 app = Flask(__name__)
+uri = "mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority"
 
 
-
-student_coll = Student()
-cca_coll = Club()
-activity_coll = Activity()
+student_coll = Student(uri)
+club_coll = Club(uri)
+activity_coll = Activity(uri)
 
 
 
@@ -24,8 +24,8 @@ def index():
     pass
 
 #activity
-@app.route('/activity', methods=['GET'])
-def activity():
+@app.route('/activities', methods=['GET'])
+def activities():
     # /activity?id=?  --> Show details of activity, & participants
         # POST /activity/add_participant form [activity_id, student_id]
 
@@ -33,8 +33,6 @@ def activity():
     #If id in args -> view activity details
     if 'id' in request.args:
         activity_id = request.args['id']
-        #how do I store across functions
-
         
         # Validate request arg id
         if not validate.activity_id(activity_id):
@@ -44,7 +42,7 @@ def activity():
         activity_detail = activity_coll.get_activity_details(activity_id)
         
         # Retrieve participant records
-        participants = activity_coll.get_participants(activity_id)
+        participants, non_participants = activity_coll.get_participant_detail(activity_id)
         return view.activity_with_id(activity_detail, participants) 
         
     #if no request args, show all activities
@@ -54,25 +52,24 @@ def activity():
         return view.all_activities(all_activities)
 
 
-@app.route('/activity/add_participant', methods=['GET', 'POST'])
-def activity_add_participant():
+@app.route('/activities/add_participant', methods=['GET', 'POST'])
+def activities_add_participant():
     #If the page is GET request -> choose which activity
     if 'success' not in request.args:
 
-        activity_id = request.args['activity_id']
+        activity_id = request.args['id']
         # Validate activity_id
 
         if not validate.activity_id(activity_id):
             abort(400)
 
         #get all the students that are not participants
-        participants = activity_coll.participants(activity_id)
-        students = student_coll.all_students(participants)
+        participants, non_participants = activity_coll.get_participant_detail(activity_id)
         
-        return view.add_activity_participant(activity_id, students)
+        return view.add_activity_participant(activity_id, non_participants)
 
     else:
-        activity_id = ...
+        activity_id = request.form['activity_id']
         student_id = request.form['student'] #an id
         
         #validate both ids
@@ -87,10 +84,10 @@ def activity_add_participant():
 
         #get the student details from student_id
         student_detail = student_coll.get_student_detail(student_id)
-        return view.add_participant_participants(student_detail)
+        return view.add_activity_participants(student_detail)
 
 
-@app.route('/activity/remove_participant', methods=['GET', 'POST'])
+@app.route('/activities/remove_participant', methods=['GET', 'POST'])
 def activity_remove_participant():
     #GET: show dropdpwn list of participants
     if request.method == "GET":
@@ -101,7 +98,7 @@ def activity_remove_participant():
 
         activity_id = request.arg["activity_id"]
         participants = activity_coll.get_participants(id_)
-        return view.activity(activity, participants)
+        return view.activity(activity_id, participants)
 
     elif request.method == 'POST':
         
@@ -112,53 +109,51 @@ def activity_remove_participant():
 
 
 
-@app.route('/club', methods=['GET'])
+@app.route('/clubs', methods=['GET'])
 def club():
     # /club?id=?  --> Show details of club, & members
         # POST /club/add_member form [club_id, student_id]
 
     #If id in args -> view club details
-    if 'club_id' in request.args:
-        id_ = request.args['club_id']
+    if 'id' in request.args:
+        club_id = request.args['id']
         
         # Validate request arg id
-        if not validate.club_id(id_):
+        if not validate.club_id(club_id):
             abort(400)
             
         # Retrieve club record
-        club = club_coll.get(id_)
+        club_detail = club_coll.get_club_details(club_id)
         
         # Retrieve member records
-        members = club_coll.get_members(id_)
-        return view.club(club, members)
+        members, non_members = club_coll.get_member_detail(club_id)
+        return view.club_with_id(club_detail, members)
         
     #if no request args, show all clubs
     else:
         # retrieve clubs from storage
-        return view.all_club()
+        all_clubs = club_coll.all_clubs()
+        return view.all_club(all_clubs)
 
-@app.route('/club/add_member', methods=['GET', 'POST'])
-def club_add_member():
+@app.route('/clubs/add_member', methods=['GET', 'POST'])
+def clubs_add_member():
     #If the page is GET request -> choose which club
-    if request.method == 'GET':
+    if 'success' not in request.args:
         
-        # Handle error if request arg does not have club_id
-        if "club_id" not in request.arg:
-            abort(400)
-            
-        club_id = request.args['club_id']
+        # Handle error if request arg does not have club_id          
+        club_id = request.args['id']
         # Validate club_id
         if not validate.club_id(club_id):
             abort(400)
 
         #get all the members from this club
-        members = club_coll.get_members(club_id)
-        return view.add_club_members(club_id, members)
+        members, non_members = club_coll.get_member_detail(club_id)
+        return view.add_club_members(club_id, non_members)
 
     #if its a POST request -> add members 
-    elif request.method == 'POST':
+    else:
         club_id = request.form['club_id']
-        student_id = request.form['student_id']
+        student_id = request.form['student']
 
         #validate both ids
         if not (
@@ -170,7 +165,9 @@ def club_add_member():
         # add member to db
         club_coll.add_member(club_id, student_id)
 
-        return view.add_member_success()
+        #get the student details from st7dent_id
+        student_detail = student_coll.get_student_detail(student_id)
+        return view.add_club_members(student_detail)
 
 
 @app.route('/club/remove_member', methods=['GET', 'POST'])
