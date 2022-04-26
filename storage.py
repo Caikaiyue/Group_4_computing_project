@@ -217,6 +217,20 @@ class Activity:
         participants = doc["participants"]
         return participants
 
+    def get_activity_details(id):
+        """
+        Returns a dict
+        {"name" : , "id" }
+        of ONE activity
+        """
+        coll = self.connection()
+        doc = coll.find_one({"activity_id": id})
+        details = {}
+        details["name"] = doc["description"]
+        details["activity_id"] = doc["activity_id"]
+        return details
+
+
     def get(self, id):
         coll = self.connection()
         doc = coll.find_one({"student_id": id})
