@@ -35,4 +35,4 @@ def club_id(inputstr: str):
         return True
     else:
         return False
-    
+     
