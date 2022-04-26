@@ -197,7 +197,19 @@ class Activity:
         client = pymongo.MongoClient(self._url)
         db = client["student_registration"]
         coll = db["activity"]
-        return coll
+        return client, coll
+
+    def activity_exists(id):
+        client, coll = self.connection()
+        doc = list(coll.find({"activity_id": id}))
+        client.close()
+
+        if len(doc) == 0:
+            return False
+        
+        else: 
+            return True
+
 
     def insert(self, record): 
         coll = self.connection()
@@ -211,24 +223,44 @@ class Activity:
         )
         return
 
-    def get_participants(self, id):
-        coll = self.connection()
-        doc = coll.find_one({"activity_id": id})
-        participants = doc["participants"]
-        return participants
-
-    def get_activity_details(id):
+    def get_activity_details(self, id):
         """
         Returns a dict
         {"name" : , "id" }
         of ONE activity
         """
-        coll = self.connection()
+        client, coll = self.connection()
         doc = coll.find_one({"activity_id": id})
         details = {}
         details["name"] = doc["description"]
         details["activity_id"] = doc["activity_id"]
+        client.close()
         return details
+
+    def get_participants(self, id):
+        """
+        Returns a list of dicts
+        [{"participant_id": , "name": }] 
+        of ONE activity
+        """
+        client, coll = self.connection()
+        doc = coll.find_one({"activity_id": id})
+        participants = doc["participant_list"] # returns a list of participant id
+
+        db = client["student_registration"]
+        coll = db["student"]
+        all_students = list(coll.find()) # returns a list of dictionaries
+        students = []
+        for student in all_students:
+            students.append({"student_id": student})
+
+        doc = coll
+        
+
+        for participant in participants:
+
+        details = {}
+
 
 
     def get(self, id):
