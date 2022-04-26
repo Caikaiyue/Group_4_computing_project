@@ -127,14 +127,20 @@ class Student():
     #     return doc
 
     def all_students(self):
-         """
+        """
         Returns a dict
         {"name" : , "id" }
         of ALL activity
         """
         client, coll = self.connection()
-        all = list(coll.find())
-        return all
+        all_students = list(coll.find()) # retrieve all the records from the students collection
+        
+        data = [] # to contain a list of dict {"student_id": , "name": } to be returned
+        for student in all_students:
+            data.append({"student_id": student["student_id"], "name": student["name"]})
+        
+        client.close()
+        return data
 
     def update(self, id, **kwargs):
         coll = self.connection()
