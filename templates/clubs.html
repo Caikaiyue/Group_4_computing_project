@@ -1,0 +1,35 @@
+<html>
+    {% if picked == 'no' %}
+    <head>
+        <title>All Clubs</title>
+        
+    </head>
+    <body>
+        <h1>All Clubs</h1>
+        <table>
+            <tr><th>Clubs</th></tr>
+            {% for club in clubs %}
+            <tr><td>
+                <a href="/clubs?id={{club['id']}}">{{club['name']}}</a>
+            </td></tr>
+            {% endfor %}
+        </table>
+    </body>
+    
+    {% elif picked == 'yes' %}
+    
+    <body>
+        <h1>{{club['name']}}</h1>
+        <table>
+            <tr><th>Members</th></tr>
+            {% for member in member %}
+            <tr><td>
+                {{member['name']}}
+            </td></tr>
+            {% endfor %}
+        </table>
+        <a href="/activities/add_member">Add Member</a><br />
+    </body>
+    
+    {% endif %}
+</html>
