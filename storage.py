@@ -67,7 +67,7 @@ class ActivityRecords:
 # done: csv_to_db("cca.csv", "club")
 
 
-class Student(StudentRecords):
+class Student():
 
     """
     Encapsulate access to Student collection.
@@ -122,7 +122,7 @@ class Student(StudentRecords):
         doc = coll.find_one({"student_id": id})
         return doc
 
-    def all(self):
+    def all_students(self):
         coll = self.connection()
         all = list(coll.find())
         return all
