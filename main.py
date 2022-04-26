@@ -64,10 +64,9 @@ def activities_add_participant():
             abort(400)
 
         #get all the students that are not participants
-        participants = activity_coll.participants(activity_id)
-        students = student_coll.all_students(participants)
+        participants, nonparticipants = activity.coll.get_participant_detail()
         
-        return view.add_activity_participant(activity_id, students)
+        return view.add_activity_participant(activity_id, non_participants)
 
     else:
         activity_id = request.form['activity_id']
@@ -85,7 +84,7 @@ def activities_add_participant():
 
         #get the student details from student_id
         student_detail = student_coll.get_student_detail(student_id)
-        return view.add_participant_participants(student_detail)
+        return view.add_activity_participants(student_detail)
 
 
 @app.route('/activities/remove_participant', methods=['GET', 'POST'])
