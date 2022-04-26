@@ -121,10 +121,10 @@ class Student():
         client.close()
         return
 
-    # def get(self, id):
-    #     coll = self.connection()
-    #     doc = coll.find_one({"student_id": id})
-    #     return doc
+    def get_student_detail(self, id):
+        coll = self.connection()
+        doc = coll.find_one({"student_id": id})
+        return doc
 
     def all_students(self):
         """
@@ -214,7 +214,7 @@ class Activity:
         coll = db["activity"]
         return client, coll
 
-    def activity_exists(id):
+    def activity_exists(self, id):
         """
         Check if activity exists in the database.
         """
@@ -227,6 +227,21 @@ class Activity:
         
         else: # activity_id exists
             return True
+
+    def add_participants(self, activity_id, student_id):
+        """
+        Insert a new student_id into the participant_list for ONE activity
+        """
+        client, coll = self.connection()
+        doc = coll.find_one({"activity_id": id})
+        participants = doc["participant_list"]
+        participants.append(student_id)
+        coll.update_one(
+            {"activity_id": id},
+            {'$set': {"participant_list": participants}}
+        )
+        client.close()
+        return
 
 
     def insert(self, record): 
