@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>Add Participant</title>
+    </head>
+    <body>
+        
+        {% if page_type == 'new' %}
+        
+        <h1>Add Participant</h1>
+        <form action="{{action}}" method="post">
+            <label for="dropdown">Add Participant:</label>
+        
+                <select id="dropdown" name="student">
+                {% for student in students %}
+                    <option value="{{student['id']}}">
+                    {{student['name']}}
+                    </option>
+                {% endfor %}
+                </select>
+            <input type="submit" value="Add Participant">
+        </form>
+        
+        {% elif page_type == 'success' %}
+
+        <h2>Success!</h2>
+
+        <p>{{participant['name']}} has been added</p>
+        <a href="/activities/add_participant">Add another participant</a><br />
+        <a href="/activities">Activity Page</a><br />
+        <a href="/">Home Page</a><br />
+        
+        {% endif %}
+        
+    </body>
+</html>
