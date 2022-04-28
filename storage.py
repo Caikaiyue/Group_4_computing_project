@@ -318,7 +318,7 @@ class Activity:
         data = [] # to contain a list of dict {"activity_id": , "name": } to be returned
 
         for activity in all_activities:
-            data.append({"activity_id": activity["activity_id"], "name": activity["name"]})
+            data.append({"activity_id": activity["activity_id"], "name": activity["description"]})
 
         return data
 

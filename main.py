@@ -5,9 +5,9 @@ import validate
 
 
 
-app = Flask(__name__)
-uri = "mongodb+srv://admin:admin@cluster0.ryteu.mongodb.net/student_registration?retryWrites=true&w=majority"
 
+app = Flask(__name__)
+uri = 'mongodb://Group_4:ESSD8GMd3nLct74@cluster0-shard-00-00.qbwtc.mongodb.net:27017,cluster0-shard-00-01.qbwtc.mongodb.net:27017,cluster0-shard-00-02.qbwtc.mongodb.net:27017/student_registration?ssl=true&replicaSet=atlas-u0fo68-shard-0&authSource=admin&retryWrites=true&w=majority'
 
 student_coll = Student(uri)
 club_coll = Club(uri)
@@ -36,7 +36,8 @@ def activities():
         
         # Validate request arg id
         if not validate.activity_id(activity_id):
-            abort(400)
+            pass
+            #abort(400)
 
         # Retrieve activity record
         activity_detail = activity_coll.get_activity_details(activity_id)
@@ -61,7 +62,8 @@ def activities_add_participant():
         # Validate activity_id
 
         if not validate.activity_id(activity_id):
-            abort(400)
+            pass
+            #os.abort(400)
 
         #get all the students that are not participants
         participants, non_participants = activity_coll.get_participant_detail(activity_id)
@@ -77,7 +79,8 @@ def activities_add_participant():
             validate.activity_id(activity_id)
             and validate.student_id(student_id)
         ):
-            abort(400)
+            pass
+            #os.abort(400)
         
         # add participant to db
         activity_coll.add_participant(activity_id, student_id)
@@ -94,7 +97,8 @@ def activity_remove_participant():
 
         #handle error: if activity_id not in request.arg
         if "activity_id" not in request.arg:
-            abort(400)
+            pass
+            #os.abort(400)
 
         activity_id = request.arg["activity_id"]
         participants = activity_coll.get_participants(id_)
@@ -120,7 +124,8 @@ def club():
         
         # Validate request arg id
         if not validate.club_id(club_id):
-            abort(400)
+            pass
+            #os.abort(400)
             
         # Retrieve club record
         club_detail = club_coll.get_club_details(club_id)
@@ -144,7 +149,8 @@ def clubs_add_member():
         club_id = request.args['id']
         # Validate club_id
         if not validate.club_id(club_id):
-            abort(400)
+            pass
+            #os.abort(400)
 
         #get all the members from this club
         members, non_members = club_coll.get_member_detail(club_id)
@@ -160,7 +166,8 @@ def clubs_add_member():
             validate.club_id(club_id)
             and validate.members_id(student_id)
         ):
-            abort(400)
+            pass
+            #os.abort(400)
 
         # add member to db
         club_coll.add_member(club_id, student_id)
@@ -177,7 +184,8 @@ def club_remove_member():
 
         #handle error: if club_id not in request.arg
         if "club_id" not in request.arg:
-            abort(400)
+            pass
+            #os.abort(400)
 
         club_id = request.arg["club_id"]
         members = club_coll.get_members(id_)
