@@ -30,7 +30,7 @@ def student_id(inputstr: str):
         return False
 
 def club_id(inputstr: str):
-    if inputstr.isdigit() and storage.club _exist(inputstr):
+    if inputstr.isdigit() and storage.club_exist(inputstr):
         return True
     else:
         return False
