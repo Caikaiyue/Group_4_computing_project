@@ -4,8 +4,7 @@ import view
 import validate
 
 
-
-
+x = "ghello world"
 app = Flask(__name__)
 uri = 'mongodb://Group_4:ESSD8GMd3nLct74@cluster0-shard-00-00.qbwtc.mongodb.net:27017,cluster0-shard-00-01.qbwtc.mongodb.net:27017,cluster0-shard-00-02.qbwtc.mongodb.net:27017/student_registration?ssl=true&replicaSet=atlas-u0fo68-shard-0&authSource=admin&retryWrites=true&w=majority'
 
@@ -43,7 +42,8 @@ def activities():
         activity_detail = activity_coll.get_activity_details(activity_id)
         
         # Retrieve participant records
-        participants, non_participants = activity_coll.get_participant_detail(activity_id)
+        participants, non_participants = activity_coll.get_participant_details(activity_id)
+        #breakpoint()
         return view.activity_with_id(activity_detail, participants) 
         
     #if no request args, show all activities

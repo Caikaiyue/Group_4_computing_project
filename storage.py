@@ -155,6 +155,7 @@ class Student():
         coll.delete_one({"student_id": id})
         return
 
+    
 
 class Club:
 
@@ -335,7 +336,11 @@ class Activity:
     #     coll.delete_one({"activity_id": id})
     #     return
 
+def activity_exist(inputstr):
+    pass
 
+def student_exist(inputstr):
+    pass
 
 
 

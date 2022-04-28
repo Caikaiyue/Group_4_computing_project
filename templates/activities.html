@@ -10,7 +10,7 @@
             <tr><th>Activity</th></tr>
             {% for activity in activities %}
             <tr><td>
-                <a href="/activities?id={{activity['id']}}">{{activity['name']}}</a>
+                <a href="/activities?id={{activity['activity_id']}}">{{activity['name']}}</a>
             </td></tr>
             {% endfor %}
         </table>
