@@ -97,34 +97,40 @@ class Student():
         self._url = url
 
     def connection(self):
-        client = pymongo.MongoClient(self._uri)
+        client = pymongo.MongoClient(self._url)
         db = client['student_registration']
         coll = db["student"]
         return client, coll
     
-    def insert(self, record):
-        """
-        Insert a record into the students collection
-        """
-        coll = self.connection()
-        coll.insert_one({
-            "student_id": record["student_id"],
-            "name": record["name"],
-            "age": record["age"],
-            "year_enrolled": record["year_enrolled"],
-            "graduating_year": record["graduating_year"],
-            "class_id": record["class_id"],
-            "subjects": record["subjects"],
-            "clubs": record["clubs"],
-            "activities": record["activities"]
-            }
-        )
-        client.close()
-        return
+    # def insert(self, record):
+    #     """
+    #     Insert a record into the students collection
+    #     """
+    #     client, coll = self.connection()
+    #     coll.insert_one({
+    #         "student_id": record["student_id"],
+    #         "name": record["name"],
+    #         "age": record["age"],
+    #         "year_enrolled": record["year_enrolled"],
+    #         "graduating_year": record["graduating_year"],
+    #         "class_id": record["class_id"],
+    #         "subjects": record["subjects"],
+    #         "clubs": record["clubs"],
+    #         "activities": record["activities"]
+    #         }
+    #     )
+    #     client.close()
+    #     return
 
     def get_student_detail(self, id):
+        """
+        Returns a dict
+        {"name": , "student_id": }
+        of ONE student
+        """
         client, coll = self.connection()
         doc = coll.find_one({"student_id": id})
+        client.close()
         return doc
 
     def all_students(self):
@@ -259,7 +265,7 @@ class Club:
         """
         Returns a list of dict
         [{"club_id": , "name": }]
-        basically retrieve the club_id and name of all activities
+        basically retrieve the club_id and name of all club
         """
         client, coll = self.connection() 
         all_clubs = list(coll.find()) # retrieve all the records from the Club collection
