@@ -279,7 +279,9 @@ class Club:
         return data
 
     def member_exists(self, student_id):
-
+        client, coll = self.connection()
+        member_list = coll.find_one({})
+        pass
 
     # def get(self, id):
     #     client, coll = self.connection() 
