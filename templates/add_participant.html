@@ -13,7 +13,7 @@
                 <select id="dropdown" name="student">
                 {% for student in students %}
                     <option value="{{student['student_id']}}">
-                    {{student['name']}}
+                    {{student['name']}}{{student['student_id']}}
                     </option>
                 {% endfor %}
                 </select>

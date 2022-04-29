@@ -30,8 +30,10 @@ def student_id(student_coll, inputstr: str):
         return False
 
 def club_id(club_coll, inputstr: str):
-    if inputstr.isdigit() and club_coll.club_exist(inputstr):
+    if inputstr.isdigit() and club_coll.club_exists(inputstr):
         return True
     else:
         return False
+
+
 
