@@ -1,36 +1,241 @@
 <html>
-    {% if picked == 'no' %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <head>
         <title>All Activities</title>
-        
-    </head>
-    <body>
-        <h1>All Activities</h1>
-        <table>
-            <tr><th>Activity</th></tr>
-            {% for activity in activities %}
-            <tr><td>
-                <a href="/activities?id={{activity['activity_id']}}">{{activity['name']}}</a>
-            </td></tr>
-            {% endfor %}
-        </table>
-    </body>
-    
-    {% elif picked == 'yes' %}
-    
-    <body>
-        <h1>{{activity['name']}}</h1>
-        <table>
-            <tr><th>Participants</th></tr>
-            {% for participant in participants %}
-            <tr><td>
-                {{participant['name']}}
-            </td></tr>
-            {% endfor %}
-        </table>
-        <a href="/activities/add_participant?id={{activity['activity_id']}}">Add Participant</a><br />
+        <style>
+            
+            @import url('https://fonts.googleapis.com/css?family=Cardo:400i|Rubik:400,700&display=swap');
+            :root {
+            	 --d: 700ms;
+            	 --e: cubic-bezier(0.19, 1, 0.22, 1);
+            	 --font-sans: 'Rubik', sans-serif;
+            	 --font-serif: 'Cardo', serif;
+            }
+            * {
+            	 box-sizing: border-box;
+            }
+            html, body {
+            	height: 100%;
+                width: 100vw;
+                margin: 0;
+                background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(https://i.stack.imgur.com/SvWWN.png);
+                background-position: center;
+                background-size: cover;
+                position: relative;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            body {
+            	 display: grid;
+            	 place-items: center;
+            }
+            .page-content {
+            	 display: grid;
+            	 grid-gap: 1rem;
+            	 padding: 1rem;
+            	 max-width: 1024px;
+            	 margin: 0 auto;
+            	 font-family: var(--font-sans);
+            }
+            @media (min-width: 600px) {
+            	 .page-content {
+            		 grid-template-columns: repeat(2, 1fr);
+            	}
+            }
+            @media (min-width: 800px) {
+            	 .page-content {
+            		 grid-template-columns: repeat(4, 1fr);
+            	}
+            }
+            .card {
+            	 position: relative;
+            	 display: flex;
+            	 align-items: flex-end;
+            	 overflow: hidden;
+            	 padding: 1rem;
+            	 width: 100%;
+            	 text-align: center;
+            	 color: whitesmoke;
+            	 background-color: whitesmoke;
+            	 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1), 0 4px 4px rgba(0, 0, 0, 0.1), 0 8px 8px rgba(0, 0, 0, 0.1), 0 16px 16px rgba(0, 0, 0, 0.1);
+            }
+            @media (min-width: 600px) {
+            	 .card {
+            		 height: 350px;
+            	}
+            }
+            .card:before {
+            	 content: '';
+            	 position: absolute;
+            	 top: 0;
+            	 left: 0;
+            	 width: 100%;
+            	 height: 110%;
+            	 background-size: cover;
+            	 background-position: 0 0;
+            	 transition: transform calc(var(--d) * 1.5) var(--e);
+            	 pointer-events: none;
+            }
+            .card:after {
+            	 content: '';
+            	 display: block;
+            	 position: absolute;
+            	 top: 0;
+            	 left: 0;
+            	 width: 100%;
+            	 height: 200%;
+            	 pointer-events: none;
+            	 background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.009) 11.7%, rgba(0, 0, 0, 0.034) 22.1%, rgba(0, 0, 0, 0.072) 31.2%, rgba(0, 0, 0, 0.123) 39.4%, rgba(0, 0, 0, 0.182) 46.6%, rgba(0, 0, 0, 0.249) 53.1%, rgba(0, 0, 0, 0.320) 58.9%, rgba(0, 0, 0, 0.394) 64.3%, rgba(0, 0, 0, 0.468) 69.3%, rgba(0, 0, 0, 0.540) 74.1%, rgba(0, 0, 0, 0.607) 78.8%, rgba(0, 0, 0, 0.668) 83.6%, rgba(0, 0, 0, 0.721) 88.7%, rgba(0, 0, 0, 0.762) 94.1%, rgba(0, 0, 0, 0.790) 100%);
+            	 transform: translateY(-50%);
+            	 transition: transform calc(var(--d) * 2) var(--e);
+            }
+            .card:nth-child(1):before {
+            	 background-image: url(https://images-ext-1.discordapp.net/external/GCDxG_dbHk4icbEqWUw4KeAgGqzEU3yLVFDFXsrVe4Y/https/thumbs.dreamstime.com/b/blurred-image-huge-crow-people-music-concert-blue-t-tones-vertical-81411415.jpg?width=446&height=669);
+            }
+            .card:nth-child(2):before {
+            	 background-image: url(https://nanyangjc.moe.edu.sg/wp-content/uploads/2022/04/sig.jpg);
+            }
+            .card:nth-child(3):before {
+            	 background-image: url(https://post.healthline.com/wp-content/uploads/2020/09/Blood_Donation-732X549-thumbnail.jpg);
+            }
+            .card:nth-child(4):before {
+            	 background-image: url(https://nanyangjc.moe.edu.sg/wp-content/uploads/2022/03/sc-1.jpg);
+            }
+            .card:nth-child(5):before {
+            	 background-image: url(https://nanyangjc.moe.edu.sg/wp-content/uploads/2022/03/ill-2.jpg);
+            }
+            .card:nth-child(6):before {
+            	 background-image: url(https://www.wikihow.com/images/thumb/e/e6/Donate-Food-Step-03.jpg/v4-460px-Donate-Food-Step-03.jpg);
+            }
+            .card:nth-child(7):before {
+            	 background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlx7u1JAsJAmWi1AjyIR4y5WhYcZjJgQHCqACMCmzCzpeESHC9-r9Pei6pMdT2ve8XVqg&usqp=CAU);
+            }
+            .card:nth-child(8):before {
+            	 background-image: url(https://nanyangjc.moe.edu.sg/wp-content/uploads/2022/02/cca.jpg);
+            }
+            .card:nth-child(9):before {
+            	 background-image: url(https://nanyangjc.moe.edu.sg/wp-content/uploads/2022/02/CTO.jpg);
+            }
+            .content {
+            	 position: relative;
+            	 display: flex;
+            	 flex-direction: column;
+            	 align-items: center;
+            	 width: 100%;
+            	 padding: 1rem;
+            	 transition: transform var(--d) var(--e);
+            	 z-index: 1;
+            }
+            .content > * + * {
+            	 margin-top: 1rem;
+            }
+            .title {
+            	 font-size: 1.3rem;
+            	 font-weight: bold;
+            	 line-height: 1.2;
+            }
+            .copy {
+            	 font-family: var(--font-serif);
+            	 font-size: 1.125rem;
+            	 font-style: italic;
+            	 line-height: 1.35;
+            }
+            .btn {
+            	 cursor: pointer;
+            	 margin-top: 1.5rem;
+            	 padding: 0.75rem 1.5rem;
+            	 font-size: 0.65rem;
+            	 font-weight: bold;
+            	 letter-spacing: 0.025rem;
+            	 text-transform: uppercase;
+            	 color: white;
+            	 background-color: black;
+            	 border: none;
+            }
+            .btn:hover {
+            	 background-color: #0d0d0d;
+            }
+            .btn:focus {
+            	 outline: 1px dashed yellow;
+            	 outline-offset: 3px;
+            }
+            @media (hover: hover) and (min-width: 600px) {
+            	 .card:after {
+            		 transform: translateY(0);
+            	}
+            	 .content {
+            		 transform: translateY(calc(100% - 4.5rem));
+            	}
+            	 .content > *:not(.title) {
+            		 opacity: 0;
+            		 transform: translateY(1rem);
+            		 transition: transform var(--d) var(--e), opacity var(--d) var(--e);
+            	}
+            	 .card:hover, .card:focus-within {
+            		 align-items: center;
+            	}
+            	 .card:hover:before, .card:focus-within:before {
+            		 transform: translateY(-4%);
+            	}
+            	 .card:hover:after, .card:focus-within:after {
+            		 transform: translateY(-50%);
+            	}
+            	 .card:hover .content, .card:focus-within .content {
+            		 transform: translateY(0);
+            	}
+            	 .card:hover .content > *:not(.title), .card:focus-within .content > *:not(.title) {
+            		 opacity: 1;
+            		 transform: translateY(0);
+            		 transition-delay: calc(var(--d) / 8);
+            	}
+            	 .card:focus-within:before, .card:focus-within:after, .card:focus-within .content, .card:focus-within .content > *:not(.title) {
+            		 transition-duration: 0s;
+            	}
+            }
 
+            table, th, td {
+              border:2px inset white;
+            }
+
+        </style>
+    </head>
+    {% if picked == 'no' %}
+    <body>
+        <h1 style="color:white; text-align: center;">All Activities</h1>
+                <main class="page-content">
+                {% for activity in activities %}
+                <div class="card">
+                <div class="content">
+                    <h2 class="title">{{activity['name']}}</h2>
+                <a href="/activities?id={{activity['activity_id']}}">
+                <button class="btn">View {{activity['name']}}</button>
+                </a>
+                </div>
+                </div>
+                    
+            {% endfor %}
+                </main>
     </body>
-    
+    {% elif picked == 'yes' %}
+    <body>
+        <h1 style="color:white; text-align: center; font-size: 60px; font-weight: bold">{{activity['name']}}</h1>
+        <div>
+        <table>
+            <tr>
+                <th style="color:white; text-align: center; font-weight: bold">Student ID</th>
+                <th style="color:white; text-align: center; font-weight: bold">Participants</th>
+            </tr>
+            <tr>
+            {% for participant in participants %}
+            <tr>
+                <td style="color:white; text-align: center;">{{participant['participant_id']}}</td>
+                <td style="color:white; text-align: center;">{{participant['name']}}</td>
+            </tr>
+            {% endfor %}
+        </table><br/>
+        <a href="/activities/add_participant?id={{activity['activity_id']}}" style="color:white;">Add Participant</a><br/>
+        </div>
+    </body>
     {% endif %}
 </html>
