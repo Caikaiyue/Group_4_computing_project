@@ -1,36 +1,59 @@
 <html>
     <head>
         <title>Add Participant</title>
+        <style>
+            
+            body {
+              width: 100vw;
+              height: 100vh;
+              margin: 0;
+              overflow: hidden;
+              background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(https://i.stack.imgur.com/SvWWN.png);
+              background-position: center;
+              background-size: cover;
+              positon: relative;
+            }
+            
+            div {
+                font-family: 'Cordia New Bold';
+                font-size: 40pt;
+                text-align: center;
+                position: relative;
+            }
+        </style>
     </head>
     <body>
         
         {% if page_type == 'new' %}
         
-        <h1>Add Participant</h1>
+        <div>
+        <h1 style="color:white; text-align: center;">Add Participant</h1>
         <form action="{{action}}" method="post">
-            <label for="dropdown">Add Participant:</label>
+            <label for="dropdown" style="color:white; text-align: center;">Add Participant:</label>
         
-                <select id="dropdown" name="student">
+                <select id="dropdown" name="student" style="width:100px; height: 30px;">
                 {% for student in students %}
-                    <option value="{{student['student_id']}}">
-                    {{student['name']}}{{student['student_id']}}
+                    <option value="{{student['student_id']}}" style="width:100px; height: 30px;">
+                    {{student['name']}}
                     </option>
                 {% endfor %}
                 </select>
             <input type='hidden' value="{{activity_id}}" name="activity_id">
             <input type="submit" value="Add Participant">
         </form>
+        </div>
         
         {% elif page_type == 'success' %}
 
-        <h2>Success!</h2>
+        <div>
+        <h1 style="color:white; text-align: center;">Success!</h1>
 
-        <p>{{student['name']}} has been added</p>
-
-        <a href="/activities">Activity Page</a><br />
-        <a href="/">Home Page</a><br />
-        
+        <p style="color:white; text-align: center;">{{student['name']}} has been added</p>
+        <a href="/activities" style="color:white; text-align: center;">Activity Page</a><br />
+        <a href="/" style="color:white; text-align: center;">Home Page</a><br />
+        </div>
         {% endif %}
+        
         
     </body>
 </html>
