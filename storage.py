@@ -421,8 +421,8 @@ class Activity:
 
         for student in students:
             if student["student_id"] in all_participants:
-                participants.append({"participant_id": student["student_id"], "name": student["name"]})
-            else: non_participants.append({"participant_id": student["student_id"], "name": student["name"]})
+                participants.append({"student_id": student["student_id"], "name": student["name"]})
+            else: non_participants.append({"student_id": student["student_id"], "name": student["name"]})
 
         client.close()
 
