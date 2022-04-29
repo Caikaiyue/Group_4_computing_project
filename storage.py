@@ -1,4 +1,5 @@
 import csv, pymongo
+from types import MemberDescriptorType
 
 
 class StudentRecords:
@@ -46,23 +47,23 @@ class ActivityRecords:
         self._participants = participants
 
     
-    # function to insert all the required records from a csv file into a collection belonging to the student_registration database
-    def csv_to_db(file, url):
+# function to insert all the required records from a csv file into a collection belonging to the student_registration database
+def csv_to_db(file, url):
 
 
-        file = open(file) # open the csv file
-        data = [row for row in csv.DictReader(file)] # read the data from the csv file into a list
-        file.close()
+    file = open(file) # open the csv file
+    data = [row for row in csv.DictReader(file)] # read the data from the csv file into a list
+    file.close()
 
-        client = pymongo.MongoClient(url)
-        db = client['student_registration']
-        coll = db["student"]
+    client = pymongo.MongoClient(url)
+    db = client['student_registration']
+    coll = db["student"]
 
-        for record in data : # loop through each record in the data list
-            student = Student(field for field in record) # instantiate each record
-            
+    for record in data : # loop through each record in the data list
+        student = Student(field for field in record) # instantiate each record
+        
 
-        return 
+    return 
 
 # done: csv_to_db("cca.csv", "club")
 
@@ -110,11 +111,11 @@ class Student():
             "student_id": record["student_id"],
             "name": record["name"],
             "age": record["age"],
-            "year_enrolled": record["year_enrolled"]
+            "year_enrolled": record["year_enrolled"],
             "graduating_year": record["graduating_year"],
             "class_id": record["class_id"],
             "subjects": record["subjects"],
-            "clubs": record["clubs"]
+            "clubs": record["clubs"],
             "activities": record["activities"]
             }
         )
@@ -161,46 +162,143 @@ class Club:
     def __init__(self, url):
         self._url = url
 
-    def connection(self):
+    def connection(self): 
         client = pymongo.MongoClient(self._url)
         db = client['student_registration']
         coll = db["club"]
-        return coll
+        return client, coll
 
-    def insert(self, record): 
-        coll = self.connection() 
-        coll.insert_one({
-            "club_id": record["club_id"],
-            "name": record["name"],
-            "members": record["members"]
-        }
-        ) 
-        record = StudentRecords()
-        return
+    def club_exists(self, id): # tested
+        """
+        Check if club exists in the database.
+        """
+        client, coll = self.connection()
+        doc = list(coll.find({"club_id": id})) # find whether the club_id exists
+        client.close()
 
-    def get(self, id):
-        coll = self.connection() 
-        doc = coll.find_one({"club_id": id}) 
-        members = doc["members"] 
-        return members
+        if len(doc) == 0: # no such club
+            return False
+        
+        else: # club exists
+            return True
 
-    def all(self):
-        coll = self.connection()
-        all = list(coll.find())
-        return all
-
-    def update(self, id, **kwargs):
-        coll = self.connection()
-        doc = coll.update_one(
-            {"club_id": id},
-            {'$set': {kwargs["key"]: kwargs["value"]}}
+    def add_participants(self, club_id, student_id): # tested
+        """
+        Insert a new student_id into the member_list for ONE club
+        """
+        client, coll = self.connection()
+        doc = coll.find_one({"club_id": club_id})
+        members = doc["member_list"]
+        members.append(student_id)
+        coll.update_one(
+            {"club_id": club_id},
+            {'$set': {"member_list": members}}
         )
+        client.close()
         return
 
-    def delete(self, id):
-        coll = self.connection()
-        doc = coll.delete_one({"club_id": id})
-        return
+    # def insert(self, record): 
+    #     client, coll = self.connection() 
+    #     coll.insert_one({
+    #         "club_id": record["club_id"],
+    #         "name": record["name"],
+    #         "members": record["members"]
+    #     }
+    #     ) 
+    #     record = StudentRecords()
+    #     client.close()
+    #     return
+
+    def get_club_details(self, id): # tested
+        """
+        Returns a dict
+        {"name" : , "id" }
+        of ONE club
+        """
+        client, coll = self.connection()
+        doc = coll.find_one({"club_id": id}) # find the ONE club
+        details = {} # a dict to store the name and club_id to be returned
+        details["name"] = doc["name"] # get the club name
+        details["club_id"] = doc["club_id"] # get the club_id
+        client.close()
+        return details
+    
+    def get_member_details(self, id): # tested
+        """
+        Returns two list of dicts
+        members = [{"student_id": , "name": }] 
+        non_members = [{"student_id": , "name": }] 
+        of ONE club
+        """
+        client, coll = self.connection()
+        doc = coll.find_one({"club_id": id}) # find the ONE club
+        member_list = doc["member_list"] # returns a list of member_id
+
+        db = client["student_registration"] 
+        coll = db["student"] # access the student collection
+        all_students = list(coll.find()) # retrieve all the student records
+
+        students = [] # to contain a list of dict {"student_id": , "name": }
+        for student in all_students: # loop through all student records 
+            # just append the student_id and name to the students list in dict format
+            students.append({"student_id": student["student_id"], "name": student["name"]})
+
+        members = [] # to contain a list of dicts {"student_id": , "name": } if only the student_id is found in the participant list
+        non_members = [] # to contain a list of dicts {"student_id": , "name": } if the student_id is not found in the participant list
+
+        for student in students:
+            if student["student_id"] in member_list:
+                members.append({"student_id": student["student_id"], "name": student["name"]})
+            else: non_members.append({"student_id": student["student_id"], "name": student["name"]})
+
+        client.close()
+
+        return members, non_members
+
+    def all_club(self): # tested
+        """
+        Returns a list of dict
+        [{"club_id": , "name": }]
+        basically retrieve the club_id and name of all activities
+        """
+        client, coll = self.connection() 
+        all_clubs = list(coll.find()) # retrieve all the records from the Club collection
+        
+        data = [] # to contain a list of dict {"club_id": , "name": } to be returned
+
+        for club in all_clubs:
+            data.append({"club_id": club["club_id"], "name": club["name"]})
+
+        client.close()
+        return data
+
+    # def get(self, id):
+    #     client, coll = self.connection() 
+    #     doc = coll.find_one({"club_id": id}) 
+    #     members = doc["members"] 
+    #     client.close()
+    #     return members
+
+    # def all(self):
+    #     client, coll = self.connection()
+    #     all = list(coll.find())
+    #     client.close()
+    #     return all
+
+    # def update(self, id, **kwargs):
+    #     client, coll = self.connection()
+    #     doc = coll.update_one(
+    #         {"club_id": id},
+    #         {'$set': {kwargs["key"]: kwargs["value"]}}
+    #     )
+    #     client.close()
+    #     return
+
+    # def delete(self, id):
+    #     client, coll = self.connection()
+    #     doc = coll.delete_one({"club_id": id})
+    #     client.close()
+    #     return
 
 
 class Activity:
@@ -214,7 +312,7 @@ class Activity:
         coll = db["activity"]
         return client, coll
 
-    def activity_exists(self, id):
+    def activity_exists(self, id): # tested
         """
         Check if activity exists in the database.
         """
@@ -228,7 +326,7 @@ class Activity:
         else: # activity_id exists
             return True
 
-    def add_participants(self, activity_id, student_id):
+    def add_participants(self, activity_id, student_id): # tested
         """
         Insert a new student_id into the participant_list for ONE activity
         """
@@ -244,23 +342,23 @@ class Activity:
         return
 
 
-    def insert(self, record): 
-        """
-        Inserts a record into the Activity collection
-        """
-        client, coll = self.connection()
-        coll.insert_one({
-            "activity_id": record["activity_id"],
-            "start_date": record["start_date"],
-            "end_year": record["end_year"],
-            "description": record["description"],
-            "participants": record["participants"]
-        }
-        )
-        client.close()
-        return
+    # def insert(self, record): 
+    #     """
+    #     Inserts a record into the Activity collection
+    #     """
+    #     client, coll = self.connection()
+    #     coll.insert_one({
+    #         "activity_id": record["activity_id"],
+    #         "start_date": record["start_date"],
+    #         "end_year": record["end_year"],
+    #         "description": record["description"],
+    #         "participants": record["participants"]
+    #     }
+    #     )
+    #     client.close()
+    #     return
 
-    def get_activity_details(self, id):
+    def get_activity_details(self, id): # tested
         """
         Returns a dict
         {"name" : , "id" }
@@ -274,7 +372,7 @@ class Activity:
         client.close()
         return details
 
-    def get_participant_details(self, id):
+    def get_participant_details(self, id): # tested
         """
         Returns two list of dicts
         participants = [{"participant_id": , "name": }] 
@@ -306,7 +404,7 @@ class Activity:
 
         return participants, non_participants
 
-    def all_activities(self):
+    def all_activities(self): # tested
         """
         Returns a list of dict
         [{"activity_id": , "name": }]
@@ -320,6 +418,7 @@ class Activity:
         for activity in all_activities:
             data.append({"activity_id": activity["activity_id"], "name": activity["name"]})
 
+        client.close()
         return data
 
     # def update(self, id, **kwargs):
