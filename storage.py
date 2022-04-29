@@ -91,12 +91,14 @@ class Student():
         """
         client, coll = self.connection() # establish connection
         doc = list(coll.find({"student_id": id})) 
+        client.close()
 
         if len(doc) == 0: # if there is nothing in the list, means student_id does not exist in the collection
             return False
 
         else:
             return True
+
     
     def add_student(self, record):
         """
@@ -278,10 +280,21 @@ class Club:
         client.close()
         return data
 
-    def member_exists(self, student_id):
-        client, coll = self.connection()
-        member_list = coll.find_one({})
-        pass
+    def member_exists(self, club_id, student_id):
+        """
+        Check if student is in the ONE club
+        """
+        client, coll = self.connection() # get the connection
+        doc = coll.find_one({"club_id": club_id}) # retrieve the records from the ONE club
+        member_list = doc["member_list"] # retrieve the member_list field from the retrieved record
+        client.close() # close the connection
+
+        if student_id in member_list: # check if student is a member of the club
+            return True
+
+        else: 
+            return False
+        
 
     # def get(self, id):
     #     client, coll = self.connection() 
@@ -427,10 +440,25 @@ class Activity:
         data = [] # to contain a list of dict {"activity_id": , "name": } to be returned
 
         for activity in all_activities:
-            data.append({"activity_id": activity["activity_id"], "name": activity["name"]})
+            data.append({"activity_id": activity["activity_id"], "name": activity["description"]})
 
         client.close()
         return data
+
+    def participant_exists(self, activity_id, student_id):
+        """
+        Check if student is in the ONE activity
+        """
+        client, coll = self.connection() # get the connection
+        doc = coll.find_one({"activity_id": activity_id}) # retrieve the ONE activity
+        participant_list = doc["participant_list"] # retrieve the participant_list field from the retrieved record
+        client.close() # close the connection
+
+        if student_id in participant_list: # check if student is in the activity
+            return True
+
+        else:
+            return False
 
     # def update(self, id, **kwargs):
     #     coll = self.connection()
