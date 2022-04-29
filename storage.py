@@ -52,7 +52,6 @@ class ActivityRecords:
 # function to insert all the required records from a csv file into a collection belonging to the student_registration database
 def csv_to_db(file, url):
 
-
     file = open(file) # open the csv file
     data = [row for row in csv.DictReader(file)] # read the data from the csv file into a list
     file.close()
@@ -84,7 +83,20 @@ class Student():
         db = client['student_registration']
         coll = db["student"]
         return client, coll
-    
+
+    def student_exists(self, id):
+        """
+        Check if student_id exists in the collection
+        """
+        client, coll = self.connection() # establish connection
+        doc = list(coll.find({"student_id": id})) 
+        client.close()
+
+        if len(doc) == 0: # if there is nothing in the list, means student_id does not exist in the collection
+            return False
+
+        else:
+            return True
     def add_student(self, record):
         """
         Insert a record into the students collection
@@ -175,7 +187,7 @@ class Club:
         else: # club exists
             return True
 
-    def add_participant(self, club_id, student_id): # tested
+    def add_member(self, club_id, student_id): # tested
         """
         Insert a new student_id into the member_list for ONE club
         """
@@ -202,6 +214,21 @@ class Club:
     #     client.close()
     #     return
 
+    def member_exists(self, club_id, student_id):
+        """
+        Check if student is in the ONE club
+        """
+        client, coll = self.connection() # get the connection
+        doc = coll.find_one({"club_id": club_id}) # retrieve the records from the ONE club
+        member_list = doc["member_list"] # retrieve the member_list field from the retrieved record
+        client.close() # close the connection
+
+        if student_id in member_list: # check if student is a member of the club
+            return True
+
+        else: 
+            return False
+            
     def get_club_detail(self, id): # tested
         """
         Returns a dict
@@ -265,6 +292,11 @@ class Club:
         client.close()
         return data
 
+    def member_exists(self, student_id):
+        client, coll = self.connection()
+        member_list = coll.find_one({})
+        pass
+
     # def get(self, id):
     #     client, coll = self.connection() 
     #     doc = coll.find_one({"club_id": id}) 
@@ -319,7 +351,7 @@ class Activity:
         else: # activity_id exists
             return True
 
-    def add_participants(self, activity_id, student_id): # tested
+    def add_participant(self, activity_id, student_id): # tested
         """
         Insert a new student_id into the participant_list for ONE activity
         """
@@ -374,7 +406,7 @@ class Activity:
         """
         client, coll = self.connection()
         doc = coll.find_one({"activity_id": id}) # find the ONE activity
-        participant_id = doc["participant_list"] # returns a list of participant id
+        all_participants = doc["participant_list"] # returns a list of participant id
 
         db = client["student_registration"] 
         coll = db["student"] # access the student collection
@@ -389,9 +421,10 @@ class Activity:
         non_participants = [] # to contain a list of dicts {"student_id": , "name": } if the student_id is not found in the participant list
 
         for student in students:
-            if student["student_id"] in participant_id:
+            if student["student_id"] in all_participants:
                 participants.append({"participant_id": student["student_id"], "name": student["name"]})
-            else: non_participants.append({"student_id": student["student_id"], "name": student["name"]})
+            else: 
+                non_participants.append({"student_id": student["student_id"], "name": student["name"]})
 
         client.close()
 

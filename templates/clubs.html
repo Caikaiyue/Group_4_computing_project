@@ -10,7 +10,7 @@
             <tr><th>Clubs</th></tr>
             {% for club in clubs %}
             <tr><td>
-                <a href="/clubs?id={{club['id']}}">{{club['name']}}</a>
+                <a href="/clubs?id={{club['club_id']}}">{{club['name']}}</a>
             </td></tr>
             {% endfor %}
         </table>
@@ -22,13 +22,13 @@
         <h1>{{club['name']}}</h1>
         <table>
             <tr><th>Members</th></tr>
-            {% for member in member %}
+            {% for member in members %}
             <tr><td>
                 {{member['name']}}
             </td></tr>
             {% endfor %}
         </table>
-        <a href="/activities/add_member">Add Member</a><br />
+        <a href="/clubs/add_member?id={{club['club_id']}}">Add Member</a><br />
     </body>
     
     {% endif %}

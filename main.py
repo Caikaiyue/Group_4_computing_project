@@ -54,11 +54,10 @@ def activities():
 
 @app.route('/activities/add_participant', methods=['GET', 'POST'])
 def activities_add_participant():
-    print("A")
-    print(request.args)
+
     #If the page is GET request -> choose which activity
     if 'success' not in request.args:
-        print("here")
+
         activity_id = request.args['id']
         # Validate activity_id
 
@@ -69,24 +68,26 @@ def activities_add_participant():
         participants, non_participants = activity_coll.get_participants_detail(
             activity_id)
 
-        print(non_participants)
+  
         return view.add_activity_participant(activity_id, non_participants)
 
     else:
+        print(request.form)
         activity_id = request.form['activity_id']
+        
         student_id = request.form['student']  #an id
-
+        
         #validate both ids
         if not (validate.activity_id(activity_coll, activity_id)
                 and validate.student_id(student_coll, student_id)):
             abort(400)
-
+        
         # add participant to db
-        activity_coll.add_participants(activity_id, student_id)  #it never add
+        activity_coll.add_participant(activity_id, student_id)  #it never add
 
         #get the student details from student_id
         student_detail = student_coll.get_student_detail(student_id)
-        print(student_detail)
+
         return view.add_activity_participant_success(student_detail)
 
 
@@ -97,6 +98,7 @@ def clubs():
 
     #If id in args -> view club details
     if 'id' in request.args:
+
         club_id = request.args['id']
 
         # Validate request arg id
@@ -109,18 +111,20 @@ def clubs():
 
         # Retrieve member records
         members, non_members = club_coll.get_members_detail(club_id)
+ 
         return view.club_with_id(club_detail, members)
 
     #if no request args, show all clubs
     else:
         # retrieve clubs from storage
         all_clubs = club_coll.all_clubs()
-        return view.all_club(all_clubs)
+        return view.all_clubs(all_clubs)
 
 
 @app.route('/clubs/add_member', methods=['GET', 'POST'])
 def clubs_add_member():
     #If the page is GET request -> choose which club
+
     if 'success' not in request.args:
 
         # Handle error if request arg does not have club_id
@@ -132,24 +136,26 @@ def clubs_add_member():
 
         #get all the members from this club
         members, non_members = club_coll.get_members_detail(club_id)
-        return view.add_club_members(club_id, non_members)
+        return view.add_club_member(club_id, non_members)
 
     #if its a POST request -> add members
     else:
+        print(request.form)
         club_id = request.form['club_id']
         student_id = request.form['student']
 
+
         #validate both ids
-        if not (validate.club_id(club_coll, club_id)
-                and validate.members_id(student_coll, student_id)):
+        if not validate.club_id(club_coll, club_id):
             abort(400)
 
+        
         # add member to db
         club_coll.add_member(club_id, student_id)
 
         #get the student details from st7dent_id
         student_detail = student_coll.get_student_detail(student_id)
-        return view.add_club_members(student_detail)
+        return view.add_club_member_success(student_detail)
 
 
 
