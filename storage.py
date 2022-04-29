@@ -84,6 +84,19 @@ class Student():
         db = client['student_registration']
         coll = db["student"]
         return client, coll
+
+    def student_exists(self, id):
+        """
+        Check if student_id exists in the collection
+        """
+        client, coll = self.connection() # establish connection
+        doc = list(coll.find({"student_id": id})) 
+
+        if len(doc) == 0: # if there is nothing in the list, means student_id does not exist in the collection
+            return False
+
+        else:
+            return True
     
     def add_student(self, record):
         """
@@ -175,7 +188,7 @@ class Club:
         else: # club exists
             return True
 
-    def add_participant(self, club_id, student_id): # tested
+    def add_member(self, club_id, student_id): # tested
         """
         Insert a new student_id into the member_list for ONE club
         """
@@ -264,6 +277,9 @@ class Club:
 
         client.close()
         return data
+
+    def member_exists(self, student_id):
+
 
     # def get(self, id):
     #     client, coll = self.connection() 
