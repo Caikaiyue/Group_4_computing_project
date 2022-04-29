@@ -12,8 +12,8 @@
         
                 <select id="dropdown" name="student">
                 {% for student in students %}
-                    <option value="{{student['id']}}">
-                    {{student['name']}}
+                    <option value="{{student['student_id']}}">
+                    {{student['name']}}{{student['student_id']}}
                     </option>
                 {% endfor %}
                 </select>
@@ -25,8 +25,8 @@
 
         <h2>Success!</h2>
 
-        <p>{{participant['name']}} has been added</p>
-        <a href="/activities/add_participant">Add another participant</a><br />
+        <p>{{student['name']}} has been added</p>
+
         <a href="/activities">Activity Page</a><br />
         <a href="/">Home Page</a><br />
         
