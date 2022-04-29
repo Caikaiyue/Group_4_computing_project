@@ -324,11 +324,11 @@ class Activity:
         Insert a new student_id into the participant_list for ONE activity
         """
         client, coll = self.connection()
-        doc = coll.find_one({"activity_id": id})
+        doc = coll.find_one({"activity_id": activity_id})
         participants = doc["participant_list"]
         participants.append(student_id)
         coll.update_one(
-            {"activity_id": id},
+            {"activity_id": activity_id},
             {'$set': {"participant_list": participants}}
         )
         client.close()
@@ -374,7 +374,7 @@ class Activity:
         """
         client, coll = self.connection()
         doc = coll.find_one({"activity_id": id}) # find the ONE activity
-        participants = doc["participant_list"] # returns a list of participant id
+        all_participants = doc["participant_list"] # returns a list of participant id
 
         db = client["student_registration"] 
         coll = db["student"] # access the student collection
@@ -389,7 +389,7 @@ class Activity:
         non_participants = [] # to contain a list of dicts {"student_id": , "name": } if the student_id is not found in the participant list
 
         for student in students:
-            if student["student_id"] in participants:
+            if student["student_id"] in all_participants:
                 participants.append({"participant_id": student["student_id"], "name": student["name"]})
             else: non_participants.append({"participant_id": student["student_id"], "name": student["name"]})
 
