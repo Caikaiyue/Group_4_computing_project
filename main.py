@@ -3,7 +3,7 @@ from storage import Student, Club, Activity
 import view
 import validate
 
-x = "ghello world"
+
 app = Flask(__name__)
 uri = 'mongodb://Group_4:ESSD8GMd3nLct74@cluster0-shard-00-00.qbwtc.mongodb.net:27017,cluster0-shard-00-01.qbwtc.mongodb.net:27017,cluster0-shard-00-02.qbwtc.mongodb.net:27017/student_registration?ssl=true&replicaSet=atlas-u0fo68-shard-0&authSource=admin&retryWrites=true&w=majority'
 
@@ -72,7 +72,7 @@ def activities_add_participant():
         return view.add_activity_participant(activity_id, non_participants)
 
     else:
-        print(request.form)
+
         activity_id = request.form['activity_id']
         
         student_id = request.form['student']  #an id
@@ -140,7 +140,7 @@ def clubs_add_member():
 
     #if its a POST request -> add members
     else:
-        print(request.form)
+
         club_id = request.form['club_id']
         student_id = request.form['student']
 
